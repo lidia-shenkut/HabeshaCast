@@ -1,7 +1,8 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { ArrowLeft, MoreVertical, Heart, SkipBack, Play, SkipForward, Download } from 'lucide-react';
 import { MOCK_EPISODES } from '../../models/mockData';
+import { useUserData } from '../../controllers/UserDataContext';
 
 export default function PlayerScreen() {
   const navigate = useNavigate();
@@ -9,8 +10,33 @@ export default function PlayerScreen() {
   const id = parseInt(location.pathname.split('/').pop());
   const episode = MOCK_EPISODES.find(e => e.id === id) || MOCK_EPISODES[0];
   
+  const { playbackProgress, updatePlayback, downloads, toggleDownload } = useUserData();
+
   const [isPlaying, setIsPlaying] = useState(false);
-  const progress = 30; // Static for demo
+  const [progress, setProgress] = useState(playbackProgress[episode.id] || 0);
+
+  // Simulate playback
+  useEffect(() => {
+    let interval;
+    if (isPlaying) {
+      interval = setInterval(() => {
+        setProgress(p => {
+          const newProgress = p >= 100 ? 100 : p + 1;
+          updatePlayback(episode, newProgress);
+          return newProgress;
+        });
+      }, 1000);
+    }
+    return () => clearInterval(interval);
+  }, [isPlaying, episode, updatePlayback]);
+
+  // Record history immediately on open
+  useEffect(() => {
+    updatePlayback(episode, progress);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [episode.id]);
+
+  const isDownloaded = downloads.includes(episode.id);
 
   return (
     <div className="screen" style={{ background: 'var(--bg-main)' }}>
@@ -47,7 +73,7 @@ export default function PlayerScreen() {
             <div style={{ width: '12px', height: '12px', background: 'var(--secondary-color)', borderRadius: '50%', position: 'absolute', top: '-4px', left: `calc(${progress}% - 6px)`, boxShadow: '0 0 10px rgba(0,0,0,0.2)' }}></div>
           </div>
           <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '12px', color: 'var(--text-muted)' }}>
-            <span>04:12</span>
+            <span>{Math.floor(progress / 100 * parseInt(episode.duration))}:00</span>
             <span>{episode.duration}</span>
           </div>
         </div>
@@ -64,7 +90,13 @@ export default function PlayerScreen() {
               </div>}
           </button>
           <button className="btn-icon" style={{ width: '56px', height: '56px', background: 'var(--bg-input)' }}><SkipForward size={24} fill="currentColor" /></button>
-          <button className="btn-icon" style={{ background: 'transparent' }}><Download size={20} color="var(--text-muted)" /></button>
+          <button 
+            className="btn-icon" 
+            style={{ background: 'transparent' }} 
+            onClick={() => toggleDownload(episode.id)}
+          >
+            <Download size={20} color={isDownloaded ? 'var(--secondary-color)' : 'var(--text-muted)'} />
+          </button>
         </div>
       </div>
     </div>
