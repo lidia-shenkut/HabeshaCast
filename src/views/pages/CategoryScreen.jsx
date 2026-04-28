@@ -1,12 +1,15 @@
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Search, ArrowLeft, Download } from 'lucide-react';
 import { MOCK_EPISODES } from '../../models/mockData';
+import { useUserData } from '../../controllers/UserDataContext';
 
 export default function CategoryScreen() {
   const location = useLocation();
   const navigate = useNavigate();
   const categoryName = location.pathname.split('/').pop() || 'Explore';
   
+  const { downloads, toggleDownload } = useUserData();
+
   const episodes = categoryName === 'Explore' 
     ? MOCK_EPISODES 
     : MOCK_EPISODES.filter(e => e.category === decodeURIComponent(categoryName));
@@ -25,18 +28,28 @@ export default function CategoryScreen() {
         <div className="category-pill">Offline Available</div>
       </div>
 
-      {episodes.length > 0 ? episodes.map(ep => (
-        <div key={ep.id} className="episode-card" onClick={() => navigate(`/player/${ep.id}`)}>
-          <div className="episode-thumb" style={{ background: ep.color }}></div>
-          <div className="episode-info">
-            <div className="episode-title">{ep.title}</div>
-            <div className="episode-author">{ep.author} • {ep.duration}</div>
+      {episodes.length > 0 ? episodes.map(ep => {
+        const isDownloaded = downloads.includes(ep.id);
+        
+        return (
+          <div key={ep.id} className="episode-card" onClick={() => navigate(`/player/${ep.id}`)}>
+            <div className="episode-thumb" style={{ background: ep.color }}></div>
+            <div className="episode-info">
+              <div className="episode-title">{ep.title}</div>
+              <div className="episode-author">{ep.author} • {ep.duration}</div>
+            </div>
+            <div className="episode-actions" style={{ flexDirection: 'column', gap: '8px' }}>
+              <button 
+                className="btn-icon" 
+                style={{ width: '36px', height: '36px', background: 'transparent' }} 
+                onClick={(e) => { e.stopPropagation(); toggleDownload(ep.id); }}
+              >
+                <Download size={18} color={isDownloaded ? 'var(--secondary-color)' : 'var(--text-muted)'} />
+              </button>
+            </div>
           </div>
-          <div className="episode-actions" style={{ flexDirection: 'column', gap: '8px' }}>
-             <Download size={18} color="var(--text-muted)" />
-          </div>
-        </div>
-      )) : (
+        );
+      }) : (
         <div style={{ textAlign: 'center', marginTop: '40px', color: 'var(--text-muted)' }}>
           No episodes found in this category yet.
         </div>
