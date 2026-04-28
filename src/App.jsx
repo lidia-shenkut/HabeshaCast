@@ -1,5 +1,6 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { ThemeProvider } from './controllers/ThemeContext';
+import { UserDataProvider } from './controllers/UserDataContext';
 
 // Components
 import BottomNav from './views/components/BottomNav';
@@ -16,20 +17,22 @@ import ProfileScreen from './views/pages/ProfileScreen';
 function App() {
   return (
     <ThemeProvider>
-      <Router>
-        <div className="app-container">
-          <Routes>
-            <Route path="/" element={<SplashScreen />} />
-            <Route path="/login" element={<LoginScreen />} />
-            <Route path="/home" element={<HomeScreen />} />
-            <Route path="/category/:name" element={<CategoryScreen />} />
-            <Route path="/player/:id" element={<PlayerScreen />} />
-            <Route path="/upload" element={<UploadScreen />} />
-            <Route path="/profile" element={<ProfileScreen />} />
-          </Routes>
-          <BottomNav />
-        </div>
-      </Router>
+      <UserDataProvider>
+        <Router>
+          <div className="app-container">
+            <Routes>
+              <Route path="/" element={<SplashScreen />} />
+              <Route path="/login" element={<LoginScreen />} />
+              <Route path="/home" element={<HomeScreen />} />
+              <Route path="/category/:name" element={<CategoryScreen />} />
+              <Route path="/player/:id" element={<PlayerScreen />} />
+              <Route path="/upload" element={<UploadScreen />} />
+              <Route path="/profile" element={<ProfileScreen />} />
+            </Routes>
+            <BottomNav />
+          </div>
+        </Router>
+      </UserDataProvider>
     </ThemeProvider>
   );
 }
