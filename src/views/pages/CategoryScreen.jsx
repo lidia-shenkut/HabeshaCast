@@ -1,6 +1,5 @@
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Search, ArrowLeft, Download } from 'lucide-react';
-import { MOCK_EPISODES } from '../../models/mockData';
 import { useUserData } from '../../controllers/UserDataContext';
 
 export default function CategoryScreen() {
@@ -8,11 +7,11 @@ export default function CategoryScreen() {
   const navigate = useNavigate();
   const categoryName = location.pathname.split('/').pop() || 'Explore';
   
-  const { downloads, toggleDownload } = useUserData();
+  const { downloads, toggleDownload, allEpisodes } = useUserData();
 
   const episodes = categoryName === 'Explore' 
-    ? MOCK_EPISODES 
-    : MOCK_EPISODES.filter(e => e.category === decodeURIComponent(categoryName));
+    ? allEpisodes 
+    : allEpisodes.filter(e => e.category === decodeURIComponent(categoryName));
 
   return (
     <div className="screen scrollable">
