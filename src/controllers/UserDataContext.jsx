@@ -87,10 +87,12 @@ export function UserDataProvider({ children }) {
   // CREATOR FEATURES (Backend Integrated)
   const uploadEpisode = async (episodeData) => {
     try {
+      const isFormData = episodeData instanceof FormData;
+      
       await fetch(API_URL, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(episodeData)
+        headers: isFormData ? {} : { 'Content-Type': 'application/json' },
+        body: isFormData ? episodeData : JSON.stringify(episodeData)
       });
       fetchEpisodes();
     } catch (err) {
