@@ -16,28 +16,35 @@ import UploadScreen from './views/pages/UploadScreen';
 import ProfileScreen from './views/pages/ProfileScreen';
 import AdminScreen from './views/pages/AdminScreen';
 
+import { LanguageProvider } from './controllers/LanguageContext';
+import { AudioProvider } from './controllers/AudioContext';
+
 function App() {
   return (
     <ThemeProvider>
-      <AuthProvider>
-        <UserDataProvider>
-          <Router>
-          <div className="app-container">
-            <Routes>
-              <Route path="/" element={<SplashScreen />} />
-              <Route path="/login" element={<LoginScreen />} />
-              <Route path="/home" element={<HomeScreen />} />
-              <Route path="/category/:name" element={<CategoryScreen />} />
-              <Route path="/player/:id" element={<PlayerScreen />} />
-              <Route path="/upload" element={<UploadScreen />} />
-              <Route path="/profile" element={<ProfileScreen />} />
-              <Route path="/admin" element={<AdminScreen />} />
-            </Routes>
-            <BottomNav />
-          </div>
-        </Router>
-        </UserDataProvider>
-      </AuthProvider>
+      <LanguageProvider>
+        <AuthProvider>
+          <UserDataProvider>
+            <AudioProvider>
+              <Router>
+              <div className="app-container">
+                <Routes>
+                  <Route path="/" element={<SplashScreen />} />
+                  <Route path="/login" element={<LoginScreen />} />
+                  <Route path="/home" element={<HomeScreen />} />
+                  <Route path="/category/:name" element={<CategoryScreen />} />
+                  <Route path="/player/:id" element={<PlayerScreen />} />
+                  <Route path="/upload" element={<UploadScreen />} />
+                  <Route path="/profile" element={<ProfileScreen />} />
+                  <Route path="/admin" element={<AdminScreen />} />
+                </Routes>
+                <BottomNav />
+              </div>
+            </Router>
+            </AudioProvider>
+          </UserDataProvider>
+        </AuthProvider>
+      </LanguageProvider>
     </ThemeProvider>
   );
 }
