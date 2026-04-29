@@ -1,6 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { ThemeProvider } from './controllers/ThemeContext';
 import { UserDataProvider } from './controllers/UserDataContext';
+import { AuthProvider } from './controllers/AuthContext';
 
 // Components
 import BottomNav from './views/components/BottomNav';
@@ -18,8 +19,9 @@ import AdminScreen from './views/pages/AdminScreen';
 function App() {
   return (
     <ThemeProvider>
-      <UserDataProvider>
-        <Router>
+      <AuthProvider>
+        <UserDataProvider>
+          <Router>
           <div className="app-container">
             <Routes>
               <Route path="/" element={<SplashScreen />} />
@@ -34,7 +36,8 @@ function App() {
             <BottomNav />
           </div>
         </Router>
-      </UserDataProvider>
+        </UserDataProvider>
+      </AuthProvider>
     </ThemeProvider>
   );
 }
