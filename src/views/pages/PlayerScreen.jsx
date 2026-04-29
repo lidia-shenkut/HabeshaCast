@@ -78,7 +78,7 @@ export default function PlayerScreen() {
         {episode.audioUrl && (
           <audio 
             ref={audioRef} 
-            src={`http://localhost:5000${episode.audioUrl}`} 
+            src={`http://192.168.137.239:5000${episode.audioUrl}`} 
             onTimeUpdate={handleTimeUpdate} 
             onEnded={() => setIsPlaying(false)} 
             style={{ display: 'none' }}
