@@ -3,6 +3,8 @@ import { MOCK_EPISODES } from '../models/mockData';
 
 const UserDataContext = createContext();
 
+const API_URL = 'http://localhost:5000/api/episodes';
+
 export function UserDataProvider({ children }) {
   // Load data from local storage or set defaults
   const [downloads, setDownloads] = useState(() => {
@@ -25,17 +27,34 @@ export function UserDataProvider({ children }) {
     return saved ? JSON.parse(saved) : [];
   });
 
-  const [customEpisodes, setCustomEpisodes] = useState(() => {
-    const saved = localStorage.getItem('hc_custom_episodes');
-    return saved ? JSON.parse(saved) : [];
-  });
+  // DB States
+  const [dbEpisodes, setDbEpisodes] = useState([]);
+  const [pendingDbEpisodes, setPendingDbEpisodes] = useState([]);
 
   // Save to local storage whenever state changes
   useEffect(() => { localStorage.setItem('hc_downloads', JSON.stringify(downloads)); }, [downloads]);
   useEffect(() => { localStorage.setItem('hc_history', JSON.stringify(history)); }, [history]);
   useEffect(() => { localStorage.setItem('hc_playback', JSON.stringify(playbackProgress)); }, [playbackProgress]);
   useEffect(() => { localStorage.setItem('hc_likes', JSON.stringify(likes)); }, [likes]);
-  useEffect(() => { localStorage.setItem('hc_custom_episodes', JSON.stringify(customEpisodes)); }, [customEpisodes]);
+
+  // Fetch episodes from DB
+  const fetchEpisodes = async () => {
+    try {
+      const res = await fetch(`${API_URL}/approved`);
+      const data = await res.json();
+      setDbEpisodes(data.map(ep => ({ ...ep, id: ep._id })));
+      
+      const pRes = await fetch(`${API_URL}/pending`);
+      const pData = await pRes.json();
+      setPendingDbEpisodes(pData.map(ep => ({ ...ep, id: ep._id })));
+    } catch (err) {
+      console.error("Failed to fetch episodes:", err);
+    }
+  };
+
+  useEffect(() => {
+    fetchEpisodes();
+  }, []);
 
   // SMART FEATURE: Offline downloads tracking
   const toggleDownload = (episodeId) => {
@@ -65,31 +84,42 @@ export function UserDataProvider({ children }) {
     return Object.keys(counts).reduce((a, b) => counts[a] > counts[b] ? a : b);
   };
 
-  // CREATOR FEATURES
-  const uploadEpisode = (episodeData) => {
-    const newEpisode = {
-      ...episodeData,
-      id: Date.now(),
-      duration: '0:00', // Mock duration for uploads
-      color: 'linear-gradient(135deg, #10ac84, #1dd1a1)',
-      approved: false, // Needs admin approval
-    };
-    setCustomEpisodes(prev => [...prev, newEpisode]);
+  // CREATOR FEATURES (Backend Integrated)
+  const uploadEpisode = async (episodeData) => {
+    try {
+      await fetch(API_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(episodeData)
+      });
+      fetchEpisodes();
+    } catch (err) {
+      console.error(err);
+    }
   };
 
-  // ADMIN FEATURES
-  const approveEpisode = (id) => {
-    setCustomEpisodes(prev => prev.map(ep => ep.id === id ? { ...ep, approved: true } : ep));
+  // ADMIN FEATURES (Backend Integrated)
+  const approveEpisode = async (id) => {
+    try {
+      await fetch(`${API_URL}/${id}/approve`, { method: 'PATCH' });
+      fetchEpisodes();
+    } catch (err) {
+      console.error(err);
+    }
   };
 
-  const deleteEpisode = (id) => {
-    setCustomEpisodes(prev => prev.filter(ep => ep.id !== id));
-    setLikes(prev => prev.filter(l => l !== id));
-    setDownloads(prev => prev.filter(d => d !== id));
+  const deleteEpisode = async (id) => {
+    try {
+      await fetch(`${API_URL}/${id}`, { method: 'DELETE' });
+      fetchEpisodes();
+    } catch (err) {
+      console.error(err);
+    }
   };
 
-  const allEpisodes = [...MOCK_EPISODES, ...customEpisodes.filter(e => e.approved)];
-  const pendingEpisodes = customEpisodes.filter(e => !e.approved);
+  const allEpisodes = [...MOCK_EPISODES, ...dbEpisodes];
+  const pendingEpisodes = pendingDbEpisodes;
+  const customEpisodes = [...dbEpisodes, ...pendingDbEpisodes]; // Used in profile for counting uploads
 
   return (
     <UserDataContext.Provider value={{ 
