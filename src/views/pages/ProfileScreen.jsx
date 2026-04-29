@@ -68,6 +68,15 @@ export default function ProfileScreen() {
           <div style={{ flex: 1, fontSize: '16px', fontWeight: 500 }}>Listening History ({history.length})</div>
           <ArrowLeft size={16} color="var(--text-muted)" style={{ transform: 'rotate(180deg)' }} />
         </div>
+        <div className="episode-card" style={{ alignItems: 'center' }} onClick={() => navigate('/admin')}>
+          <ShieldAlert size={20} color="#ff9f43" style={{ margin: '0 8px' }} />
+          <div style={{ flex: 1, fontSize: '16px', fontWeight: 500, color: '#ff9f43' }}>Admin Panel</div>
+          {pendingEpisodes.length > 0 && (
+            <div style={{ background: '#ff9f43', color: 'white', borderRadius: '12px', padding: '2px 8px', fontSize: '12px', fontWeight: 'bold' }}>
+              {pendingEpisodes.length}
+            </div>
+          )}
+        </div>
       </div>
       
       <button className="btn btn-secondary" style={{ marginTop: '32px', color: '#ff6b6b', borderColor: 'rgba(255, 107, 107, 0.3)' }}>Log Out</button>
