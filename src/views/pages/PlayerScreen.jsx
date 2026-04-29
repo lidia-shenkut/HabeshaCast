@@ -1,16 +1,15 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { ArrowLeft, MoreVertical, Heart, SkipBack, Play, SkipForward, Download } from 'lucide-react';
-import { MOCK_EPISODES } from '../../models/mockData';
 import { useUserData } from '../../controllers/UserDataContext';
 
 export default function PlayerScreen() {
   const navigate = useNavigate();
   const location = useLocation();
   const id = parseInt(location.pathname.split('/').pop());
-  const episode = MOCK_EPISODES.find(e => e.id === id) || MOCK_EPISODES[0];
   
-  const { playbackProgress, updatePlayback, downloads, toggleDownload } = useUserData();
+  const { playbackProgress, updatePlayback, downloads, toggleDownload, allEpisodes, likes, toggleLike } = useUserData();
+  const episode = allEpisodes.find(e => e.id === id) || allEpisodes[0];
 
   const [isPlaying, setIsPlaying] = useState(false);
   const [progress, setProgress] = useState(playbackProgress[episode.id] || 0);
@@ -63,7 +62,9 @@ export default function PlayerScreen() {
             <h2 style={{ fontSize: '24px', marginBottom: '8px' }}>{episode.title}</h2>
             <p style={{ color: 'var(--text-muted)', fontSize: '16px' }}>{episode.author}</p>
           </div>
-          <button className="btn-icon" style={{ background: 'transparent' }}><Heart size={24} color="var(--text-muted)" /></button>
+          <button className="btn-icon" style={{ background: 'transparent' }} onClick={() => toggleLike(episode.id)}>
+            <Heart size={24} color={likes.includes(episode.id) ? 'var(--accent-color)' : 'var(--text-muted)'} fill={likes.includes(episode.id) ? 'var(--accent-color)' : 'none'} />
+          </button>
         </div>
 
         {/* Progress Bar */}

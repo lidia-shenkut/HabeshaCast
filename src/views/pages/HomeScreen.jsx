@@ -35,7 +35,7 @@ export default function HomeScreen() {
         <span style={{ color: 'var(--secondary-color)', fontSize: '14px', fontWeight: 500 }}>See all</span>
       </div>
 
-      {MOCK_EPISODES.map(ep => (
+      {allEpisodes.map(ep => (
         <div key={ep.id} className="episode-card" onClick={() => navigate(`/player/${ep.id}`)}>
           <div className="episode-thumb" style={{ background: ep.color }}></div>
           <div className="episode-info">
