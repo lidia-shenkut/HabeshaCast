@@ -6,10 +6,10 @@ import { useUserData } from '../../controllers/UserDataContext';
 export default function PlayerScreen() {
   const navigate = useNavigate();
   const location = useLocation();
-  const id = parseInt(location.pathname.split('/').pop());
+  const id = location.pathname.split('/').pop();
   
   const { playbackProgress, updatePlayback, downloads, toggleDownload, allEpisodes, likes, toggleLike } = useUserData();
-  const episode = allEpisodes.find(e => e.id === id) || allEpisodes[0];
+  const episode = allEpisodes.find(e => e.id.toString() === id.toString()) || allEpisodes[0];
 
   const [isPlaying, setIsPlaying] = useState(false);
   const [progress, setProgress] = useState(playbackProgress[episode.id] || 0);
@@ -81,8 +81,7 @@ export default function PlayerScreen() {
             src={`http://localhost:5000${episode.audioUrl}`} 
             onTimeUpdate={handleTimeUpdate} 
             onEnded={() => setIsPlaying(false)} 
-            controls
-            style={{ width: '100%', marginBottom: '16px', borderRadius: '8px' }}
+            style={{ display: 'none' }}
           />
         )}
         <div style={{ 
