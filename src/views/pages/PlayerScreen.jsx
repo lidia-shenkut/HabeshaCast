@@ -30,7 +30,7 @@ export default function PlayerScreen() {
   const handleDownload = async () => {
     if (!episode.audioUrl) return;
     try {
-      const response = await fetch(`http://192.168.137.239:5000${episode.audioUrl}`);
+      const response = await fetch(`http://${window.location.hostname}:5000${episode.audioUrl}`);
       const blob = await response.blob();
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement('a');
