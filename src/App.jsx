@@ -13,6 +13,7 @@ import CategoryScreen from './views/pages/CategoryScreen';
 import PlayerScreen from './views/pages/PlayerScreen';
 import UploadScreen from './views/pages/UploadScreen';
 import ProfileScreen from './views/pages/ProfileScreen';
+import AdminScreen from './views/pages/AdminScreen';
 
 function App() {
   return (
@@ -28,6 +29,7 @@ function App() {
               <Route path="/player/:id" element={<PlayerScreen />} />
               <Route path="/upload" element={<UploadScreen />} />
               <Route path="/profile" element={<ProfileScreen />} />
+              <Route path="/admin" element={<AdminScreen />} />
             </Routes>
             <BottomNav />
           </div>
