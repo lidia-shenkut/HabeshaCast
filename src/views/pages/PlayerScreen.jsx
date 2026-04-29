@@ -34,7 +34,6 @@ export default function PlayerScreen() {
       const duration = audioRef.current.duration || 1;
       const newProgress = (current / duration) * 100;
       setProgress(newProgress);
-      updatePlayback(episode, newProgress);
     }
   };
 
@@ -47,19 +46,20 @@ export default function PlayerScreen() {
       interval = setInterval(() => {
         setProgress(p => {
           const newProgress = p >= 100 ? 100 : p + 1;
-          updatePlayback(episode, newProgress);
           return newProgress;
         });
       }, 1000 / speed);
+    } else {
+      updatePlayback(episode, progress); // Save progress when paused
     }
     return () => clearInterval(interval);
-  }, [isPlaying, episode, updatePlayback, speed]);
+  }, [isPlaying, episode, speed]); // removed updatePlayback dependency for interval
 
-  // Record history immediately on open
+  // Record history immediately on open and save progress when paused
   useEffect(() => {
     updatePlayback(episode, progress);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [episode.id]);
+  }, [episode.id, isPlaying]);
 
   const isDownloaded = downloads.includes(episode.id);
 
@@ -81,6 +81,8 @@ export default function PlayerScreen() {
             src={`http://localhost:5000${episode.audioUrl}`} 
             onTimeUpdate={handleTimeUpdate} 
             onEnded={() => setIsPlaying(false)} 
+            controls
+            style={{ width: '100%', marginBottom: '16px', borderRadius: '8px' }}
           />
         )}
         <div style={{ 
