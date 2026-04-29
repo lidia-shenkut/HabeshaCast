@@ -3,7 +3,7 @@ import { MOCK_EPISODES } from '../models/mockData';
 
 const UserDataContext = createContext();
 
-const API_URL = 'http://localhost:5000/api/episodes';
+const API_URL = 'http://192.168.137.239:5000/api/episodes';
 
 export function UserDataProvider({ children }) {
   // Load data from local storage or set defaults
