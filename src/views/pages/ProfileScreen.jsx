@@ -1,9 +1,11 @@
-import { Settings, Heart, Download, Clock, ArrowLeft, BarChart2 } from 'lucide-react';
+import { Settings, Heart, Download, Clock, ArrowLeft, BarChart2, ShieldAlert } from 'lucide-react';
 import ThemeToggle from '../components/ThemeToggle';
 import { useUserData } from '../../controllers/UserDataContext';
+import { useNavigate } from 'react-router-dom';
 
 export default function ProfileScreen() {
-  const { downloads, history, getTopCategory, likes, customEpisodes } = useUserData();
+  const { downloads, history, getTopCategory, likes, customEpisodes, pendingEpisodes } = useUserData();
+  const navigate = useNavigate();
   
   const listenedCount = new Set(history.map(h => h.id)).size;
   const topCategory = getTopCategory();
