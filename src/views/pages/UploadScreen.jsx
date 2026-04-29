@@ -112,6 +112,7 @@ export default function UploadScreen() {
           <option value="Skills">Skills</option>
           <option value="Stories">Stories</option>
           <option value="Life Advice">Life Advice</option>
+          <option value="Music">Music</option>
         </select>
       </div>
 

@@ -3,7 +3,8 @@ export const MOCK_CATEGORIES = [
   { id: 2, name: 'History', icon: '🏛️' },
   { id: 3, name: 'Skills', icon: '💼' },
   { id: 4, name: 'Stories', icon: '🎧' },
-  { id: 5, name: 'Life Advice', icon: '🧠' }
+  { id: 5, name: 'Life Advice', icon: '🧠' },
+  { id: 6, name: 'Music', icon: '🎵' }
 ];
 
 export const MOCK_EPISODES = [
