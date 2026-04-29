@@ -17,7 +17,8 @@ if (MONGODB_URI) {
     .then(() => console.log('✅ Connected to MongoDB Cloud'))
     .catch((err) => console.error('❌ MongoDB Connection Error:', err));
 } else {
-  console.log('⚠️ MONGODB_URI not found in .env file. Database is not connected.');
+}
+
 const path = require('path');
 
 // Routes
