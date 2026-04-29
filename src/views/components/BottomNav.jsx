@@ -1,9 +1,11 @@
 import { Link, useLocation } from 'react-router-dom';
 import { Home, Compass, PlusSquare, User } from 'lucide-react';
+import { useLanguage } from '../../controllers/LanguageContext';
 
 export default function BottomNav() {
   const location = useLocation();
   const path = location.pathname;
+  const { t } = useLanguage();
   
   if (path === '/' || path === '/login' || path.startsWith('/player')) return null;
 
@@ -11,7 +13,7 @@ export default function BottomNav() {
     <div className="bottom-nav">
       <Link to="/home" className={`nav-item ${path === '/home' ? 'active' : ''}`}>
         <Home size={24} />
-        <span>Home</span>
+        <span>{t('home')}</span>
       </Link>
       <Link to="/category/Explore" className={`nav-item ${path.startsWith('/category') ? 'active' : ''}`}>
         <Compass size={24} />
@@ -19,11 +21,11 @@ export default function BottomNav() {
       </Link>
       <Link to="/upload" className={`nav-item ${path === '/upload' ? 'active' : ''}`}>
         <PlusSquare size={24} />
-        <span>Upload</span>
+        <span>{t('upload')}</span>
       </Link>
       <Link to="/profile" className={`nav-item ${path === '/profile' ? 'active' : ''}`}>
         <User size={24} />
-        <span>Profile</span>
+        <span>{t('profile')}</span>
       </Link>
     </div>
   );
