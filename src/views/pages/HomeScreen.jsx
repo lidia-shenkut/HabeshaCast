@@ -1,10 +1,12 @@
 import { useNavigate } from 'react-router-dom';
 import { Search, Bell, Play } from 'lucide-react';
-import { MOCK_CATEGORIES, MOCK_EPISODES } from '../../models/mockData';
+import { MOCK_CATEGORIES } from '../../models/mockData';
 import ThemeToggle from '../components/ThemeToggle';
+import { useUserData } from '../../controllers/UserDataContext';
 
 export default function HomeScreen() {
   const navigate = useNavigate();
+  const { allEpisodes } = useUserData();
   return (
     <div className="screen scrollable">
       <div className="top-nav">
