@@ -3,7 +3,7 @@ import ThemeToggle from '../components/ThemeToggle';
 import { useUserData } from '../../controllers/UserDataContext';
 
 export default function ProfileScreen() {
-  const { downloads, history, getTopCategory } = useUserData();
+  const { downloads, history, getTopCategory, likes, customEpisodes } = useUserData();
   
   const listenedCount = new Set(history.map(h => h.id)).size;
   const topCategory = getTopCategory();
@@ -34,7 +34,7 @@ export default function ProfileScreen() {
           <p className="subtitle">Downloads</p>
         </div>
         <div className="glass-panel" style={{ flex: 1, padding: '16px', textAlign: 'center' }}>
-          <h3 style={{ fontSize: '24px', marginBottom: '4px' }}>3</h3>
+          <h3 style={{ fontSize: '24px', marginBottom: '4px' }}>{customEpisodes.length}</h3>
           <p className="subtitle">Uploaded</p>
         </div>
       </div>
