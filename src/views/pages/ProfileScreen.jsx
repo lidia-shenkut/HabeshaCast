@@ -1,12 +1,14 @@
-import { Settings, Heart, Download, Clock, ArrowLeft, BarChart2, ShieldAlert } from 'lucide-react';
+import { Settings, Heart, Download, Clock, ArrowLeft, BarChart2, ShieldAlert, Globe } from 'lucide-react';
 import ThemeToggle from '../components/ThemeToggle';
 import { useUserData } from '../../controllers/UserDataContext';
 import { useAuth } from '../../controllers/AuthContext';
 import { useNavigate } from 'react-router-dom';
+import { useLanguage } from '../../controllers/LanguageContext';
 
 export default function ProfileScreen() {
   const { downloads, history, getTopCategory, likes, customEpisodes, pendingEpisodes } = useUserData();
   const { user, logout } = useAuth();
+  const { language, setLanguage, t } = useLanguage();
   const navigate = useNavigate();
   
   const listenedCount = new Set(history.map(h => h.id)).size;
@@ -17,10 +19,14 @@ export default function ProfileScreen() {
     navigate('/login');
   };
 
+  const toggleLanguage = () => {
+    setLanguage(language === 'en' ? 'am' : 'en');
+  };
+
   return (
     <div className="screen scrollable">
       <div className="top-nav">
-        <h2 style={{ marginBottom: 0 }}>Profile</h2>
+        <h2 style={{ marginBottom: 0 }}>{t('profile')}</h2>
         <div className="nav-actions">
           <ThemeToggle />
           <button className="btn-icon"><Settings size={20} /></button>
@@ -42,7 +48,7 @@ export default function ProfileScreen() {
         </div>
         <div className="glass-panel" style={{ flex: 1, padding: '16px', textAlign: 'center' }}>
           <h3 style={{ fontSize: '24px', marginBottom: '4px' }}>{downloads.length}</h3>
-          <p className="subtitle">Downloads</p>
+          <p className="subtitle">{t('downloads')}</p>
         </div>
         <div className="glass-panel" style={{ flex: 1, padding: '16px', textAlign: 'center' }}>
           <h3 style={{ fontSize: '24px', marginBottom: '4px' }}>{customEpisodes.length}</h3>
@@ -50,18 +56,27 @@ export default function ProfileScreen() {
         </div>
       </div>
 
-      {/* Analytics Insight */}
-      <div className="glass-panel" style={{ padding: '16px', marginBottom: '24px', display: 'flex', alignItems: 'center', gap: '16px', borderLeft: '4px solid var(--secondary-color)' }}>
-        <div style={{ background: 'var(--bg-input)', padding: '12px', borderRadius: '50%' }}>
-          <BarChart2 size={24} color="var(--secondary-color)" />
-        </div>
-        <div>
-          <h4 style={{ fontSize: '14px', color: 'var(--text-muted)', marginBottom: '4px' }}>Top Category</h4>
-          <div style={{ fontSize: '18px', fontWeight: '600' }}>{topCategory}</div>
-        </div>
-      </div>
-
       <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+        {/* Language Toggle */}
+        <div className="episode-card" style={{ alignItems: 'center' }} onClick={toggleLanguage}>
+          <Globe size={20} color="var(--text-muted)" style={{ margin: '0 8px' }} />
+          <div style={{ flex: 1, fontSize: '16px', fontWeight: 500 }}>{t('language')}: {language === 'en' ? t('english') : t('amharic')}</div>
+          <div style={{ background: 'var(--bg-input)', padding: '4px 8px', borderRadius: '8px', fontSize: '12px', fontWeight: 600, color: 'var(--secondary-color)' }}>
+            Switch
+          </div>
+        </div>
+
+        {/* Analytics Insight */}
+        <div className="glass-panel" style={{ padding: '16px', margin: '8px 0', display: 'flex', alignItems: 'center', gap: '16px', borderLeft: '4px solid var(--secondary-color)' }}>
+          <div style={{ background: 'var(--bg-input)', padding: '12px', borderRadius: '50%' }}>
+            <BarChart2 size={24} color="var(--secondary-color)" />
+          </div>
+          <div>
+            <h4 style={{ fontSize: '14px', color: 'var(--text-muted)', marginBottom: '4px' }}>Top Category</h4>
+            <div style={{ fontSize: '18px', fontWeight: '600' }}>{topCategory}</div>
+          </div>
+        </div>
+
         <div className="episode-card" style={{ alignItems: 'center' }}>
           <Heart size={20} color="var(--text-muted)" style={{ margin: '0 8px' }} />
           <div style={{ flex: 1, fontSize: '16px', fontWeight: 500 }}>Liked Episodes ({likes.length})</div>
@@ -69,19 +84,19 @@ export default function ProfileScreen() {
         </div>
         <div className="episode-card" style={{ alignItems: 'center' }}>
           <Download size={20} color="var(--text-muted)" style={{ margin: '0 8px' }} />
-          <div style={{ flex: 1, fontSize: '16px', fontWeight: 500 }}>Downloaded Content</div>
+          <div style={{ flex: 1, fontSize: '16px', fontWeight: 500 }}>{t('downloads')}</div>
           <ArrowLeft size={16} color="var(--text-muted)" style={{ transform: 'rotate(180deg)' }} />
         </div>
         <div className="episode-card" style={{ alignItems: 'center' }}>
           <Clock size={20} color="var(--text-muted)" style={{ margin: '0 8px' }} />
-          <div style={{ flex: 1, fontSize: '16px', fontWeight: 500 }}>Listening History ({history.length})</div>
+          <div style={{ flex: 1, fontSize: '16px', fontWeight: 500 }}>{t('history')} ({history.length})</div>
           <ArrowLeft size={16} color="var(--text-muted)" style={{ transform: 'rotate(180deg)' }} />
         </div>
         
         {user?.role === 'admin' && (
           <div className="episode-card" style={{ alignItems: 'center' }} onClick={() => navigate('/admin')}>
             <ShieldAlert size={20} color="#ff9f43" style={{ margin: '0 8px' }} />
-            <div style={{ flex: 1, fontSize: '16px', fontWeight: 500, color: '#ff9f43' }}>Admin Panel</div>
+            <div style={{ flex: 1, fontSize: '16px', fontWeight: 500, color: '#ff9f43' }}>{t('admin')} Panel</div>
             {pendingEpisodes.length > 0 && (
               <div style={{ background: '#ff9f43', color: 'white', borderRadius: '12px', padding: '2px 8px', fontSize: '12px', fontWeight: 'bold' }}>
                 {pendingEpisodes.length}
