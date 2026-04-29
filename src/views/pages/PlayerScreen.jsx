@@ -21,7 +21,7 @@ export default function PlayerScreen() {
   // Auto-play if not already playing this episode
   useEffect(() => {
     if (!currentEpisode || currentEpisode.id !== episode.id) {
-      playEpisode(episode);
+      playEpisode(episode, true);
     }
   }, [id]);
 
