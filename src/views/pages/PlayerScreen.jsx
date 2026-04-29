@@ -13,6 +13,7 @@ export default function PlayerScreen() {
 
   const [isPlaying, setIsPlaying] = useState(false);
   const [progress, setProgress] = useState(playbackProgress[episode.id] || 0);
+  const [speed, setSpeed] = useState(1);
 
   // Simulate playback
   useEffect(() => {
@@ -24,10 +25,10 @@ export default function PlayerScreen() {
           updatePlayback(episode, newProgress);
           return newProgress;
         });
-      }, 1000);
+      }, 1000 / speed);
     }
     return () => clearInterval(interval);
-  }, [isPlaying, episode, updatePlayback]);
+  }, [isPlaying, episode, updatePlayback, speed]);
 
   // Record history immediately on open
   useEffect(() => {
@@ -81,7 +82,13 @@ export default function PlayerScreen() {
 
         {/* Controls */}
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '32px', width: '100%' }}>
-          <button className="btn-icon" style={{ background: 'transparent' }}><span style={{ fontSize: '14px', fontWeight: 600 }}>1x</span></button>
+          <button 
+            className="btn-icon" 
+            style={{ background: 'transparent', width: '40px' }}
+            onClick={() => setSpeed(s => s === 1 ? 1.5 : s === 1.5 ? 2 : 1)}
+          >
+            <span style={{ fontSize: '14px', fontWeight: 600 }}>{speed}x</span>
+          </button>
           <button className="btn-icon" style={{ width: '56px', height: '56px', background: 'var(--bg-input)' }}><SkipBack size={24} fill="currentColor" /></button>
           <button className="btn-icon" style={{ width: '72px', height: '72px', background: 'var(--primary-color)', color: 'white', boxShadow: 'var(--shadow-glow)' }} onClick={() => setIsPlaying(!isPlaying)}>
             <Play size={32} fill="currentColor" style={{ display: isPlaying ? 'none' : 'block', marginLeft: '4px' }} />
