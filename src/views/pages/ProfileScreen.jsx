@@ -15,7 +15,7 @@ export default function ProfileScreen() {
   const { downloads, history, getTopCategory, likes, customEpisodes, pendingEpisodes, allEpisodes } = useUserData();
   const { user, logout } = useAuth();
   const { language, setLanguage, t } = useLanguage();
-  const { theme, toggleTheme } = useTheme();
+  const { isDark, toggleTheme } = useTheme();
   const navigate = useNavigate();
   
   const [isEditing, setIsEditing] = useState(false);
@@ -195,7 +195,7 @@ export default function ProfileScreen() {
             <div style={{ fontWeight: 600 }}>Dark Mode</div>
           </div>
           <label className="switch">
-            <input type="checkbox" checked={theme === 'dark'} onChange={toggleTheme} />
+            <input type="checkbox" checked={isDark} onChange={toggleTheme} />
             <span className="slider"></span>
           </label>
         </div>
