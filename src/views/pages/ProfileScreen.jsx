@@ -53,7 +53,7 @@ export default function ProfileScreen() {
       <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
         <div className="episode-card" style={{ alignItems: 'center' }}>
           <Heart size={20} color="var(--text-muted)" style={{ margin: '0 8px' }} />
-          <div style={{ flex: 1, fontSize: '16px', fontWeight: 500 }}>Liked Episodes</div>
+          <div style={{ flex: 1, fontSize: '16px', fontWeight: 500 }}>Liked Episodes ({likes.length})</div>
           <ArrowLeft size={16} color="var(--text-muted)" style={{ transform: 'rotate(180deg)' }} />
         </div>
         <div className="episode-card" style={{ alignItems: 'center' }}>

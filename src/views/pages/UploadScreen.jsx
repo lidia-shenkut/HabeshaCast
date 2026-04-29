@@ -1,6 +1,47 @@
-import { PlusSquare } from 'lucide-react';
+import { useState } from 'react';
+import { PlusSquare, CheckCircle } from 'lucide-react';
+import { useUserData } from '../../controllers/UserDataContext';
+import { useNavigate } from 'react-router-dom';
 
 export default function UploadScreen() {
+  const { uploadEpisode } = useUserData();
+  const navigate = useNavigate();
+
+  const [title, setTitle] = useState('');
+  const [description, setDescription] = useState('');
+  const [category, setCategory] = useState('');
+  const [success, setSuccess] = useState(false);
+
+  const handleUpload = () => {
+    if (!title || !category) return alert('Title and Category are required!');
+
+    uploadEpisode({
+      title,
+      description,
+      category,
+      author: 'Lidia Mekonnen',
+    });
+
+    setSuccess(true);
+    setTimeout(() => {
+      setSuccess(false);
+      setTitle('');
+      setDescription('');
+      setCategory('');
+      navigate('/profile');
+    }, 2000);
+  };
+
+  if (success) {
+    return (
+      <div className="screen scrollable" style={{ justifyContent: 'center', alignItems: 'center' }}>
+        <CheckCircle size={64} color="var(--accent-color)" style={{ marginBottom: '16px' }} />
+        <h2>Upload Successful!</h2>
+        <p className="subtitle" style={{ textAlign: 'center' }}>Your episode is pending admin approval.</p>
+      </div>
+    );
+  }
+
   return (
     <div className="screen scrollable">
       <div className="top-nav">
@@ -17,17 +58,38 @@ export default function UploadScreen() {
       </div>
 
       <div className="input-group">
-        <input type="text" className="input-field" placeholder="Episode Title" style={{ marginBottom: '16px' }} />
-        <textarea className="input-field" placeholder="Description..." rows="4" style={{ marginBottom: '16px', resize: 'none' }}></textarea>
-        <select className="input-field" style={{ marginBottom: '16px', appearance: 'none', color: 'var(--text-main)' }}>
-          <option value="" disabled selected>Select Category</option>
+        <input 
+          type="text" 
+          className="input-field" 
+          placeholder="Episode Title" 
+          style={{ marginBottom: '16px' }} 
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+        />
+        <textarea 
+          className="input-field" 
+          placeholder="Description..." 
+          rows="4" 
+          style={{ marginBottom: '16px', resize: 'none' }}
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+        ></textarea>
+        <select 
+          className="input-field" 
+          style={{ marginBottom: '16px', appearance: 'none', color: 'var(--text-main)' }}
+          value={category}
+          onChange={(e) => setCategory(e.target.value)}
+        >
+          <option value="" disabled>Select Category</option>
           <option value="Education">Education</option>
           <option value="History">History</option>
           <option value="Skills">Skills</option>
+          <option value="Stories">Stories</option>
+          <option value="Life Advice">Life Advice</option>
         </select>
       </div>
 
-      <button className="btn btn-primary">Publish Episode</button>
+      <button className="btn btn-primary" onClick={handleUpload}>Publish Episode</button>
     </div>
   );
 }
