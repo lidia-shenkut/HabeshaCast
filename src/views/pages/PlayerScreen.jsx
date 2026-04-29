@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { ArrowLeft, MoreVertical, Heart, SkipBack, Play, SkipForward, Download } from 'lucide-react';
 import { useUserData } from '../../controllers/UserDataContext';
@@ -75,6 +75,14 @@ export default function PlayerScreen() {
       </div>
 
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+        {episode.audioUrl && (
+          <audio 
+            ref={audioRef} 
+            src={`http://localhost:5000${episode.audioUrl}`} 
+            onTimeUpdate={handleTimeUpdate} 
+            onEnded={() => setIsPlaying(false)} 
+          />
+        )}
         <div style={{ 
           width: '280px', height: '280px', 
           borderRadius: '24px', 
