@@ -20,6 +20,10 @@ if (MONGODB_URI) {
   console.log('⚠️ MONGODB_URI not found in .env file. Database is not connected.');
 }
 
+// Routes
+const episodeRoutes = require('./routes/episodeRoutes');
+app.use('/api/episodes', episodeRoutes);
+
 // Basic Route for Testing
 app.get('/', (req, res) => {
   res.send('HabeshaCast Backend API is running!');
