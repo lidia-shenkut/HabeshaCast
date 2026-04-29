@@ -43,7 +43,7 @@ export function AudioProvider({ children }) {
 
   useEffect(() => {
     if (currentEpisode && currentEpisode.audioUrl) {
-      const url = `http://192.168.137.239:5000${currentEpisode.audioUrl}`;
+      const url = `http://${window.location.hostname}:5000${currentEpisode.audioUrl}`;
       if (audioRef.current.src !== url) {
         audioRef.current.src = url;
         if (isPlaying) {
