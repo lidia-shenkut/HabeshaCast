@@ -14,9 +14,34 @@ export default function PlayerScreen() {
   const [isPlaying, setIsPlaying] = useState(false);
   const [progress, setProgress] = useState(playbackProgress[episode.id] || 0);
   const [speed, setSpeed] = useState(1);
+  const audioRef = useRef(null);
 
-  // Simulate playback
+  // Sync real audio element
   useEffect(() => {
+    if (audioRef.current) {
+      audioRef.current.playbackRate = speed;
+      if (isPlaying) {
+        audioRef.current.play().catch(e => console.error("Audio play failed:", e));
+      } else {
+        audioRef.current.pause();
+      }
+    }
+  }, [isPlaying, speed]);
+
+  const handleTimeUpdate = () => {
+    if (audioRef.current) {
+      const current = audioRef.current.currentTime;
+      const duration = audioRef.current.duration || 1;
+      const newProgress = (current / duration) * 100;
+      setProgress(newProgress);
+      updatePlayback(episode, newProgress);
+    }
+  };
+
+  // Simulate playback for mock data if no audioUrl
+  useEffect(() => {
+    if (episode.audioUrl) return; // Skip simulation if real audio exists
+    
     let interval;
     if (isPlaying) {
       interval = setInterval(() => {
