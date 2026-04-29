@@ -18,11 +18,17 @@ if (MONGODB_URI) {
     .catch((err) => console.error('❌ MongoDB Connection Error:', err));
 } else {
   console.log('⚠️ MONGODB_URI not found in .env file. Database is not connected.');
-}
+const path = require('path');
 
 // Routes
+const authRoutes = require('./routes/authRoutes');
 const episodeRoutes = require('./routes/episodeRoutes');
+
+app.use('/api/auth', authRoutes);
 app.use('/api/episodes', episodeRoutes);
+
+// Static file serving for uploads
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Basic Route for Testing
 app.get('/', (req, res) => {

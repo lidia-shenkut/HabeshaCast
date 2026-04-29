@@ -1,6 +1,26 @@
 const express = require('express');
 const router = express.Router();
 const Episode = require('../models/Episode');
+const multer = require('multer');
+const path = require('path');
+const fs = require('fs');
+
+// Ensure uploads directory exists
+const uploadDir = path.join(__dirname, '..', 'uploads');
+if (!fs.existsSync(uploadDir)) {
+  fs.mkdirSync(uploadDir);
+}
+
+// Configure Multer storage
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, 'uploads/');
+  },
+  filename: (req, file, cb) => {
+    cb(null, Date.now() + path.extname(file.originalname));
+  }
+});
+const upload = multer({ storage });
 
 // Get all approved episodes (for home/category screens)
 router.get('/approved', async (req, res) => {
@@ -23,13 +43,13 @@ router.get('/pending', async (req, res) => {
 });
 
 // Create a new episode (Upload screen)
-router.post('/', async (req, res) => {
+router.post('/', upload.single('audio'), async (req, res) => {
   const episode = new Episode({
     title: req.body.title,
     description: req.body.description,
     category: req.body.category,
     author: req.body.author,
-    audioUrl: req.body.audioUrl,
+    audioUrl: req.file ? `/uploads/${req.file.filename}` : '',
     duration: req.body.duration || '0:00',
     color: req.body.color || 'linear-gradient(135deg, #10ac84, #1dd1a1)',
     approved: false
@@ -62,6 +82,14 @@ router.delete('/:id', async (req, res) => {
   try {
     const episode = await Episode.findById(req.params.id);
     if (!episode) return res.status(404).json({ message: 'Episode not found' });
+
+    // Try deleting associated file
+    if (episode.audioUrl) {
+      const filePath = path.join(__dirname, '..', episode.audioUrl);
+      if (fs.existsSync(filePath)) {
+        fs.unlinkSync(filePath);
+      }
+    }
 
     await episode.deleteOne();
     res.json({ message: 'Episode deleted' });
