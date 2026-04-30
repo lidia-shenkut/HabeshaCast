@@ -44,8 +44,21 @@ export function AuthProvider({ children }) {
     setUser(null);
   };
 
+  const updateProfile = async (profileData) => {
+    if (!user) return;
+    const isFormData = profileData instanceof FormData;
+    const res = await fetch(`${API_URL}/profile/${user.id}`, {
+      method: 'PATCH',
+      headers: isFormData ? {} : { 'Content-Type': 'application/json' },
+      body: isFormData ? profileData : JSON.stringify(profileData)
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.message);
+    setUser(data);
+  };
+
   return (
-    <AuthContext.Provider value={{ user, login, register, logout }}>
+    <AuthContext.Provider value={{ user, login, register, logout, updateProfile }}>
       {children}
     </AuthContext.Provider>
   );

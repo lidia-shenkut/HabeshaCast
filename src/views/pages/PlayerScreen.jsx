@@ -30,7 +30,10 @@ export default function PlayerScreen() {
   const handleDownload = async () => {
     if (!episode.audioUrl) return;
     try {
-      const response = await fetch(`http://${window.location.hostname}:5000${episode.audioUrl}`);
+      const audioUrl = `http://${window.location.hostname}:5000${episode.audioUrl}`;
+      
+      // 1. Trigger browser download (saves to phone files)
+      const response = await fetch(audioUrl);
       const blob = await response.blob();
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement('a');
@@ -39,6 +42,13 @@ export default function PlayerScreen() {
       document.body.appendChild(a);
       a.click();
       window.URL.revokeObjectURL(url);
+
+      // 2. Add to app cache (enables offline playback in the app)
+      if ('caches' in window) {
+        const cache = await caches.open('habeshacast-audio');
+        await cache.add(audioUrl);
+      }
+
       toggleDownload(episode.id);
     } catch (error) {
       console.error("Download failed:", error);
