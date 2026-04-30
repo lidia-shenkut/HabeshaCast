@@ -5,6 +5,8 @@ import { AuthProvider } from './controllers/AuthContext';
 
 // Components
 import BottomNav from './views/components/BottomNav';
+import MiniPlayer from './views/components/MiniPlayer';
+
 
 // Pages
 import SplashScreen from './views/pages/SplashScreen';
@@ -41,6 +43,7 @@ function App() {
                   <Route path="/admin" element={<AdminScreen />} />
                   <Route path="/explore" element={<ExploreScreen />} />
                 </Routes>
+                <MiniPlayer />
                 <BottomNav />
               </div>
             </Router>

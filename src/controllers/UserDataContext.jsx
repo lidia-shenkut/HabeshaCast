@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, useEffect } from 'react';
-import { MOCK_EPISODES } from '../models/mockData';
+
 
 const UserDataContext = createContext();
 
@@ -119,7 +119,7 @@ export function UserDataProvider({ children }) {
     }
   };
 
-  const allEpisodes = [...MOCK_EPISODES, ...dbEpisodes];
+  const allEpisodes = dbEpisodes;
   const pendingEpisodes = pendingDbEpisodes;
   const customEpisodes = [...dbEpisodes, ...pendingDbEpisodes]; // Used in profile for counting uploads
 

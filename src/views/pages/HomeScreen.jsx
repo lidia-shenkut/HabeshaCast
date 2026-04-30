@@ -18,7 +18,7 @@ import {
   TrendingUp,
   Headphones
 } from 'lucide-react';
-import { MOCK_EPISODES } from '../../models/mockData';
+
 import { useUserData } from '../../controllers/UserDataContext';
 import { useLanguage } from '../../controllers/LanguageContext';
 import centralFigure from '../../assets/central_figure.png';
@@ -244,52 +244,6 @@ export default function HomeScreen() {
               }}
             ></div>
           ))}
-        </div>
-      </div>
-
-      {/* 🎵 Sticky Mini Player */}
-      <div className="sticky-player glass-panel">
-        <div className="hologram-thumb" style={{ width: '52px', height: '52px', margin: 0, borderRadius: '14px' }}>
-          <img src={centralFigure} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-        </div>
-
-        
-        <div style={{ flex: 1, overflow: 'hidden' }}>
-          <h4 style={{ fontSize: '15px', margin: 0, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>The story of Emperor Tewodros II</h4>
-          <p className="subtitle" style={{ fontSize: '11px', display: 'flex', alignItems: 'center', gap: '4px' }}>
-            <span className="pulse" style={{ width: '6px', height: '6px', borderRadius: '50%', background: 'var(--accent-color)' }}></span>
-            Playing from History universe
-          </p>
-        </div>
-
-        <div className="player-wave" style={{ width: '50px', display: 'flex', gap: '2px' }}>
-          {[...Array(6)].map((_, i) => (
-            <div 
-              key={i} 
-              className="wave-bar" 
-              style={{ 
-                height: `${40 + Math.random() * 60}%`, 
-                animationDelay: `${i * 0.1}s`,
-                width: '2px'
-              }}
-            ></div>
-          ))}
-        </div>
-
-        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-          <Heart size={22} className="pulse" style={{ color: '#ff4757', filter: 'drop-shadow(0 0 5px rgba(255,71,87,0.5))' }} />
-          <div 
-            className="btn-icon" 
-            style={{ 
-              background: 'white', 
-              color: 'black', 
-              width: '44px', 
-              height: '44px',
-              boxShadow: '0 0 20px rgba(255,255,255,0.4)'
-            }}
-          >
-            <Play size={20} fill="black" />
-          </div>
         </div>
       </div>
 

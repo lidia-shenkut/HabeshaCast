@@ -173,25 +173,7 @@ export default function ExploreScreen() {
         ))}
       </div>
 
-      {/* Mini Player */}
-      <div className="sticky-player glass-panel" style={{ bottom: '90px' }}>
-        <div className="hologram-thumb" style={{ width: '48px', height: '48px', margin: 0 }}>
-          <img src={centralFigure} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-        </div>
-        <div style={{ flex: 1 }}>
-          <h4 style={{ fontSize: '14px', margin: 0 }}>የእኛ ታሪክ</h4>
-          <p className="subtitle" style={{ fontSize: '10px' }}>Ethiopian Storytelling Podcast</p>
-          <div style={{ display: 'flex', gap: '2px', height: '10px', alignItems: 'flex-end', marginTop: '4px' }}>
-            {[...Array(24)].map((_, j) => (
-              <div key={j} style={{ flex: 1, height: `${20 + Math.random() * 80}%`, background: 'var(--accent-color)', borderRadius: '1px' }}></div>
-            ))}
-          </div>
-        </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-           <Heart size={20} color="#ff4757" />
-           <Play size={24} fill="white" />
-        </div>
-      </div>
     </div>
   );
 }
+
