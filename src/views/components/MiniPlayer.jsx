@@ -1,3 +1,4 @@
+import { useAudio } from '../../controllers/AudioContext';
 import { Play, Pause, X, Heart } from 'lucide-react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import centralFigure from '../../assets/central_figure.png';
