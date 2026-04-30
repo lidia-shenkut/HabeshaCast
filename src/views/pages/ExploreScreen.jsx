@@ -85,7 +85,7 @@ export default function ExploreScreen() {
         
         <div className="main-avatar-container">
           <img 
-            src="/C:/Users/HP/.gemini/antigravity/brain/349c730b-2bbf-4eeb-9f26-d01f282ee1fb/habeshacast_central_figure_1777554849583.png" 
+            src="../../assets/central_figure.png" 
             alt="Central AI Guide" 
             className="avatar-image" 
           />
@@ -174,7 +174,7 @@ export default function ExploreScreen() {
       {/* Mini Player */}
       <div className="sticky-player glass-panel" style={{ bottom: '90px' }}>
         <div className="hologram-thumb" style={{ width: '48px', height: '48px', margin: 0 }}>
-          <img src="/C:/Users/HP/.gemini/antigravity/brain/349c730b-2bbf-4eeb-9f26-d01f282ee1fb/habeshacast_central_figure_1777554849583.png" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+          <img src="../../assets/central_figure.png" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
         </div>
         <div style={{ flex: 1 }}>
           <h4 style={{ fontSize: '14px', margin: 0 }}>የእኛ ታሪክ</h4>
