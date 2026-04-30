@@ -15,7 +15,7 @@ export default function BottomNav() {
         <Home size={24} />
         <span>{t('home')}</span>
       </Link>
-      <Link to="/category/Explore" className={`nav-item ${path.startsWith('/category') ? 'active' : ''}`}>
+      <Link to="/explore" className={`nav-item ${path === '/explore' ? 'active' : ''}`}>
         <Compass size={24} />
         <span>Explore</span>
       </Link>
