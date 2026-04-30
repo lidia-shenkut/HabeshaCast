@@ -273,7 +273,7 @@ export default function HomeScreen() {
               className="wave-bar" 
               style={{ 
                 height: `${40 + Math.random() * 60}%`, 
-                animationDelay: `${i * 0.1s}`,
+                animationDelay: `${i * 0.1}s`,
                 width: '2px'
               }}
             ></div>
