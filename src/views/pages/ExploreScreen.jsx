@@ -19,6 +19,8 @@ import {
   Bell
 } from 'lucide-react';
 import { useUserData } from '../../controllers/UserDataContext';
+import centralFigure from '../../assets/central_figure.png';
+
 
 export default function ExploreScreen() {
   const navigate = useNavigate();
@@ -85,7 +87,7 @@ export default function ExploreScreen() {
         
         <div className="main-avatar-container">
           <img 
-            src="../../assets/central_figure.png" 
+            src={centralFigure} 
             alt="Central AI Guide" 
             className="avatar-image" 
           />
@@ -174,7 +176,7 @@ export default function ExploreScreen() {
       {/* Mini Player */}
       <div className="sticky-player glass-panel" style={{ bottom: '90px' }}>
         <div className="hologram-thumb" style={{ width: '48px', height: '48px', margin: 0 }}>
-          <img src="../../assets/central_figure.png" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+          <img src={centralFigure} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
         </div>
         <div style={{ flex: 1 }}>
           <h4 style={{ fontSize: '14px', margin: 0 }}>የእኛ ታሪክ</h4>

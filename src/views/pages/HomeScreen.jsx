@@ -14,11 +14,14 @@ import {
   Brain,
   Globe,
   Waves,
-  Sparkles
+  Sparkles,
+  TrendingUp,
+  Headphones
 } from 'lucide-react';
 import { MOCK_EPISODES } from '../../models/mockData';
 import { useUserData } from '../../controllers/UserDataContext';
 import { useLanguage } from '../../controllers/LanguageContext';
+import centralFigure from '../../assets/central_figure.png';
 
 export default function HomeScreen() {
   const navigate = useNavigate();
@@ -60,33 +63,39 @@ export default function HomeScreen() {
         </div>
       </div>
 
-      {/* 🌟 AI Mood Sphere Section */}
-      <div className="mood-sphere-container">
-        <div 
-          className="mood-orb" 
-          style={{ 
-            background: `radial-gradient(circle at 30% 30%, ${currentMood.color}, var(--bg-cosmos))`,
-            boxShadow: `0 0 60px ${currentMood.glow}, inset 0 0 20px rgba(255, 255, 255, 0.2)`
-          }}
-        >
-          <div className="ripple-effect" style={{ animationDelay: '0s', borderColor: currentMood.color }}></div>
-          <div className="ripple-effect" style={{ animationDelay: '1s', borderColor: currentMood.color }}></div>
-        </div>
+      {/* 🌟 CENTRAL FIGURE & MOOD ORBIT */}
+      <div className="central-orb-section" style={{ marginBottom: '40px' }}>
+        <div className="mood-orbit-path"></div>
         
-        <div className="mood-labels glass-panel" style={{ padding: '6px', borderRadius: '30px' }}>
-          {moods.map(mood => (
+        <div className="main-avatar-container">
+          <img 
+            src={centralFigure} 
+            alt="Central AI Guide" 
+            className="avatar-image" 
+          />
+        </div>
+
+        {moods.map((mood) => {
+          const moodClasses = {
+            'Focus': 'focus',
+            'Energy': 'energy',
+            'Relax': 'relax',
+            'Night': 'night'
+          };
+          return (
             <div 
               key={mood.name} 
-              className={`mood-tag ${activeMood === mood.name ? 'active' : ''}`}
+              className={`mood-node ${moodClasses[mood.name]} ${activeMood === mood.name ? 'active' : ''}`}
               onClick={() => setActiveMood(mood.name)}
-              style={activeMood === mood.name ? { background: mood.color } : {}}
+              style={activeMood === mood.name ? { background: mood.color, color: 'white' } : {}}
             >
-              {mood.icon} <span style={{ marginLeft: '4px' }}>{mood.name}</span>
+              {mood.icon}
+              <span className="mood-label-floating" style={{ fontSize: '9px' }}>{mood.name}</span>
             </div>
-          ))}
-        </div>
-        <p className="subtitle" style={{ fontSize: '12px', marginTop: '8px', opacity: 0.8 }}>Syncing with your {activeMood.toLowerCase()} neural patterns...</p>
+          );
+        })}
       </div>
+
 
       {/* 🪐 Hero Universe Section */}
       <div style={{ marginBottom: '32px', position: 'relative' }}>
@@ -240,23 +249,10 @@ export default function HomeScreen() {
 
       {/* 🎵 Sticky Mini Player */}
       <div className="sticky-player glass-panel">
-        <div 
-          style={{ 
-            width: '52px', 
-            height: '52px', 
-            borderRadius: '14px', 
-            background: 'linear-gradient(45deg, var(--primary-color), var(--secondary-color))',
-            flexShrink: 0,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            position: 'relative',
-            overflow: 'hidden'
-          }}
-        >
-          <Waves size={20} color="white" />
-          <div className="habesha-pattern" style={{ opacity: 0.2 }}></div>
+        <div className="hologram-thumb" style={{ width: '52px', height: '52px', margin: 0, borderRadius: '14px' }}>
+          <img src={centralFigure} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
         </div>
+
         
         <div style={{ flex: 1, overflow: 'hidden' }}>
           <h4 style={{ fontSize: '15px', margin: 0, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>The story of Emperor Tewodros II</h4>
