@@ -15,6 +15,8 @@ import PlayerScreen from './views/pages/PlayerScreen';
 import UploadScreen from './views/pages/UploadScreen';
 import ProfileScreen from './views/pages/ProfileScreen';
 import AdminScreen from './views/pages/AdminScreen';
+import ExploreScreen from './views/pages/ExploreScreen';
+
 
 import { LanguageProvider } from './controllers/LanguageContext';
 import { AudioProvider } from './controllers/AudioContext';
@@ -37,6 +39,7 @@ function App() {
                   <Route path="/upload" element={<UploadScreen />} />
                   <Route path="/profile" element={<ProfileScreen />} />
                   <Route path="/admin" element={<AdminScreen />} />
+                  <Route path="/explore" element={<ExploreScreen />} />
                 </Routes>
                 <BottomNav />
               </div>
