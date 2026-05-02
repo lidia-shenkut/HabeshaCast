@@ -628,3 +628,42 @@ input:checked + .slider:before { transform: translateX(20px); }
   position: relative;
   overflow: hidden;
 }
+/* Recording UI */
+.upload-dropzone.recording {
+  border-color: #ff4757;
+  background: rgba(255, 71, 87, 0.05);
+  cursor: default;
+}
+
+.recording-indicator {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255, 71, 87, 0.15);
+  padding: 6px 12px;
+  border-radius: 20px;
+  color: #ff4757;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  margin-bottom: 16px;
+}
+
+.recording-indicator .dot {
+  width: 8px;
+  height: 8px;
+  background: #ff4757;
+  border-radius: 50%;
+  animation: blink 1s infinite;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+
+.waveform-bar.active {
+  background: var(--accent-color);
+  box-shadow: 0 0 10px var(--accent-color);
+  transition: height 0.1s ease;
+}

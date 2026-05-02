@@ -3,7 +3,7 @@ import {
   PlusSquare, CheckCircle, Music, Upload, X, Play, 
   Pause, Info, Globe, Tag, Scissors, Mic, Shield,
   ArrowRight, Save, Trash2, Zap, AlertTriangle, Sparkles,
-  Volume2, Check
+  Volume2, Check, Square
 } from 'lucide-react';
 import { useUserData } from '../../controllers/UserDataContext';
 import { useAuth } from '../../controllers/AuthContext';
@@ -17,6 +17,12 @@ export default function UploadScreen() {
   const navigate = useNavigate();
   
   const fileInputRef = useRef(null);
+  const mediaRecorderRef = useRef(null);
+  const audioContextRef = useRef(null);
+  const analyserRef = useRef(null);
+  const animationFrameRef = useRef(null);
+  const chunksRef = useRef([]);
+
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [category, setCategory] = useState('');
@@ -31,8 +37,88 @@ export default function UploadScreen() {
   const [isAnalyzing, setIsAnalyzing] = useState(true);
   const [success, setSuccess] = useState(false);
 
-  // Mock waveform bars
+  // Recording states
+  const [isRecording, setIsRecording] = useState(false);
+  const [recordingTime, setRecordingTime] = useState(0);
+  const [liveWaveform, setLiveWaveform] = useState(Array.from({ length: 40 }, () => 10));
+
+  // Mock waveform bars for preview
   const [waveformBars] = useState(Array.from({ length: 40 }, () => Math.random() * 100));
+
+  // Handle Recording Logic
+  const startRecording = async () => {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      mediaRecorderRef.current = new MediaRecorder(stream);
+      chunksRef.current = [];
+
+      // Setup Audio Visualizer
+      const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+      const analyser = audioContext.createAnalyser();
+      const source = audioContext.createMediaStreamSource(stream);
+      source.connect(analyser);
+      analyser.fftSize = 256;
+      
+      audioContextRef.current = audioContext;
+      analyserRef.current = analyser;
+
+      mediaRecorderRef.current.ondataavailable = (e) => {
+        if (e.data.size > 0) chunksRef.current.push(e.data);
+      };
+
+      mediaRecorderRef.current.onstop = () => {
+        const blob = new Blob(chunksRef.current, { type: 'audio/webm' });
+        const file = new File([blob], `recorded-episode-${Date.now()}.webm`, { type: 'audio/webm' });
+        handleFileSelect(file);
+        stream.getTracks().forEach(track => track.stop());
+      };
+
+      mediaRecorderRef.current.start();
+      setIsRecording(true);
+      setRecordingTime(0);
+
+      // Start visualization loop
+      const bufferLength = analyser.frequencyBinCount;
+      const dataArray = new Uint8Array(bufferLength);
+      
+      const updateVisualizer = () => {
+        analyser.getByteFrequencyData(dataArray);
+        // Map frequency data to our 40 bars
+        const newWaveform = [];
+        for (let i = 0; i < 40; i++) {
+          const sampleIndex = Math.floor((i / 40) * bufferLength);
+          const value = (dataArray[sampleIndex] / 255) * 100;
+          newWaveform.push(Math.max(10, value));
+        }
+        setLiveWaveform(newWaveform);
+        animationFrameRef.current = requestAnimationFrame(updateVisualizer);
+      };
+      updateVisualizer();
+
+    } catch (err) {
+      console.error("Error accessing microphone:", err);
+      alert("Microphone access denied or not available.");
+    }
+  };
+
+  const stopRecording = () => {
+    if (mediaRecorderRef.current && isRecording) {
+      mediaRecorderRef.current.stop();
+      setIsRecording(false);
+      cancelAnimationFrame(animationFrameRef.current);
+      if (audioContextRef.current) audioContextRef.current.close();
+    }
+  };
+
+  useEffect(() => {
+    let interval;
+    if (isRecording) {
+      interval = setInterval(() => {
+        setRecordingTime(prev => prev + 1);
+      }, 1000);
+    }
+    return () => clearInterval(interval);
+  }, [isRecording]);
 
   const handleFileSelect = (file) => {
     if (file && file.type.startsWith('audio/')) {
@@ -121,22 +207,47 @@ export default function UploadScreen() {
 
       {!audioFile ? (
         <div 
-          className={`upload-dropzone ${isDragging ? 'dragging' : ''}`}
+          className={`upload-dropzone ${isDragging ? 'dragging' : ''} ${isRecording ? 'recording' : ''}`}
           onDragOver={(e) => { e.preventDefault(); setIsDragging(true); }}
           onDragLeave={() => setIsDragging(false)}
           onDrop={(e) => { e.preventDefault(); setIsDragging(false); handleFileSelect(e.dataTransfer.files[0]); }}
-          onClick={() => fileInputRef.current.click()}
         >
-          <div className="neon-glow" style={{ marginBottom: '24px' }}>
-            <Upload size={64} color="var(--secondary-color)" />
-          </div>
-          <h3 style={{ fontSize: '20px', marginBottom: '8px' }}>Drag & drop audio files</h3>
-          <p className="subtitle">Your files will be private until you publish them</p>
-          <div style={{ marginTop: '24px' }}>
-            <button className="btn btn-secondary" style={{ width: 'auto', padding: '10px 24px' }}>
-              Browse Files
-            </button>
-          </div>
+          {isRecording ? (
+            <div style={{ width: '100%', textAlign: 'center' }}>
+              <div className="recording-indicator">
+                <div className="dot"></div>
+                <span>RECORDING LIVE</span>
+              </div>
+              <div style={{ fontSize: '48px', fontWeight: 'bold', margin: '20px 0', fontFamily: 'monospace' }}>
+                {formatTime(recordingTime)}
+              </div>
+              <div className="waveform-container" style={{ height: '80px', marginBottom: '32px' }}>
+                {liveWaveform.map((height, i) => (
+                  <div key={i} className="waveform-bar active" style={{ height: `${height}%`, width: '4px', margin: '0 2px' }}></div>
+                ))}
+              </div>
+              <button className="btn btn-primary" style={{ background: '#ff4757', border: 'none', width: 'auto', padding: '12px 32px' }} onClick={stopRecording}>
+                <Square size={20} style={{ marginRight: '8px' }} fill="white" /> Stop Recording
+              </button>
+            </div>
+          ) : (
+            <>
+              <div className="neon-glow" style={{ marginBottom: '24px' }}>
+                <Upload size={64} color="var(--secondary-color)" />
+              </div>
+              <h3 style={{ fontSize: '20px', marginBottom: '8px' }}>Drag & drop audio files</h3>
+              <p className="subtitle">Your files will be private until you publish them</p>
+              
+              <div style={{ display: 'flex', gap: '16px', marginTop: '32px' }}>
+                <button className="btn btn-secondary" style={{ width: 'auto', padding: '10px 24px' }} onClick={() => fileInputRef.current.click()}>
+                  <Music size={18} style={{ marginRight: '8px' }} /> Browse Files
+                </button>
+                <button className="btn btn-primary" style={{ width: 'auto', padding: '10px 24px' }} onClick={startRecording}>
+                  <Mic size={18} style={{ marginRight: '8px' }} /> Record Now
+                </button>
+              </div>
+            </>
+          )}
           <input 
             type="file" 
             ref={fileInputRef} 
@@ -264,7 +375,7 @@ export default function UploadScreen() {
       )}
 
       {/* Metadata Fields */}
-      <div style={{ marginTop: '32px', opacity: isUploading || showAnalysis ? 0.5 : 1, pointerEvents: isUploading || showAnalysis ? 'none' : 'auto' }}>
+      <div style={{ marginTop: '32px', opacity: isUploading || showAnalysis || isRecording ? 0.5 : 1, pointerEvents: isUploading || showAnalysis || isRecording ? 'none' : 'auto' }}>
         <div className="section-header">
           <h3 className="section-title">Episode Details</h3>
         </div>
@@ -318,12 +429,13 @@ export default function UploadScreen() {
             <button className="btn btn-secondary" style={{ flex: 1 }} onClick={() => navigate(-1)}>
               Cancel
             </button>
-            <button className="btn btn-primary" style={{ flex: 2 }} onClick={handleUpload} disabled={!audioFile || isUploading}>
+            <button className="btn btn-primary" style={{ flex: 2 }} onClick={handleUpload} disabled={!audioFile || isUploading || isRecording}>
               {isUploading ? 'Uploading...' : 'Upload & Analyze'}
             </button>
           </>
         )}
       </div>
     </div>
+
   );
 }
