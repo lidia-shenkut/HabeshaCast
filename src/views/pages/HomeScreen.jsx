@@ -121,6 +121,7 @@ export default function HomeScreen() {
           />
           <div 
             style={{ position: 'absolute', right: '12px', top: '50%', transform: 'translateY(-50%)', background: 'var(--bg-glass-bright)', padding: '8px', borderRadius: '12px', cursor: 'pointer' }}
+            onClick={() => navigate('/upload')}
           >
             <Mic size={18} color="var(--text-primary)" />
           </div>
@@ -250,6 +251,7 @@ export default function HomeScreen() {
       {/* Floating Voice Assistant */}
       <div 
         className="btn-icon glass-panel" 
+        onClick={() => navigate('/upload')}
         style={{ 
           position: 'fixed', 
           bottom: '120px', 
