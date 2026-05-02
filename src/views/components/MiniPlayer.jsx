@@ -11,20 +11,19 @@ export default function MiniPlayer() {
 
   const isPlayerPage = location.pathname.startsWith('/player');
 
-  if (!currentEpisode || isPlayerPage) return null;
+  const isHiddenPage = ['/', '/login'].includes(location.pathname) || location.pathname.startsWith('/player');
+  if (!currentEpisode || isHiddenPage) return null;
 
 
   return (
     <div 
       className="sticky-player glass-panel" 
       style={{ 
-        bottom: '80px', 
-        left: '0', 
-        right: '0',
-        width: '100%',
-        borderRadius: '24px 24px 0 0',
-        height: '90px',
-        borderBottom: 'none',
+        bottom: '90px', 
+        left: '12px', 
+        right: '12px',
+        borderRadius: '20px',
+        height: '80px',
         animation: 'slideUp 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
         zIndex: 1100
       }}
