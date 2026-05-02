@@ -10,6 +10,7 @@ const userSchema = new mongoose.Schema({
   phone: { type: String, default: '' },
   location: { type: String, default: '' },
   interests: { type: [String], default: [] },
+  isBlocked: { type: Boolean, default: false },
   createdAt: { type: Date, default: Date.now }
 });
 

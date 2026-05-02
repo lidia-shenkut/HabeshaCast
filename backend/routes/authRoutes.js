@@ -47,11 +47,27 @@ router.post('/login', async (req, res) => {
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) return res.status(400).json({ message: 'Invalid credentials' });
 
+    if (user.isBlocked) return res.status(403).json({ message: 'Account blocked. Please contact support.' });
+
     res.json({ 
       id: user._id, name: user.name, email: user.email, role: user.role,
       avatar: user.avatar, bio: user.bio, phone: user.phone, 
       location: user.location, interests: user.interests 
     });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
+// Block User (Admin)
+router.patch('/block/:id', async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id);
+    if (!user) return res.status(404).json({ message: 'User not found' });
+    
+    user.isBlocked = true;
+    await user.save();
+    res.json({ message: 'User blocked successfully' });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }

@@ -5,6 +5,7 @@ const episodeSchema = new mongoose.Schema({
   description: { type: String },
   category: { type: String, required: true },
   author: { type: String, required: true },
+  creator: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
   audioUrl: { type: String },
   duration: { type: String, default: '0:00' },
   color: { type: String, default: 'linear-gradient(135deg, #10ac84, #1dd1a1)' },
