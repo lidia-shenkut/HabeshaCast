@@ -95,6 +95,15 @@ export function AudioProvider({ children }) {
     return `${minutes}:${seconds.toString().padStart(2, '0')}`;
   };
 
+  const stopEpisode = () => {
+    setIsPlaying(false);
+    audioRef.current.pause();
+    audioRef.current.src = "";
+    setCurrentEpisode(null);
+    setProgress(0);
+    setCurrentTime(0);
+  };
+
   return (
     <AudioContext.Provider value={{
       currentEpisode,
@@ -106,6 +115,7 @@ export function AudioProvider({ children }) {
       speed,
       setSpeed,
       playEpisode,
+      stopEpisode,
       seek,
       formatTime
     }}>

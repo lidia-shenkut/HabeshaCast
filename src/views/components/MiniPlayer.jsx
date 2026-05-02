@@ -5,7 +5,7 @@ import centralFigure from '../../assets/central_figure.png';
 
 
 export default function MiniPlayer() {
-  const { currentEpisode, isPlaying, setIsPlaying, progress } = useAudio();
+  const { currentEpisode, isPlaying, setIsPlaying, stopEpisode, progress } = useAudio();
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -60,8 +60,7 @@ export default function MiniPlayer() {
         </div>
       </div>
 
-      <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-        <Heart size={20} color="#ff4757" onClick={(e) => e.stopPropagation()} />
+      <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
         <button 
           className="btn-icon" 
           style={{ width: '40px', height: '40px', background: 'white', color: 'black' }}
@@ -71,6 +70,16 @@ export default function MiniPlayer() {
           }}
         >
           {isPlaying ? <Pause size={20} fill="black" /> : <Play size={20} fill="black" />}
+        </button>
+        <button 
+          className="btn-icon" 
+          style={{ width: '32px', height: '32px', opacity: 0.6 }}
+          onClick={(e) => {
+            e.stopPropagation();
+            stopEpisode();
+          }}
+        >
+          <X size={18} />
         </button>
       </div>
     </div>

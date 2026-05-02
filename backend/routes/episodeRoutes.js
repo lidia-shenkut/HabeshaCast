@@ -35,7 +35,9 @@ router.get('/approved', async (req, res) => {
 // Get all pending episodes (for Admin screen)
 router.get('/pending', async (req, res) => {
   try {
-    const episodes = await Episode.find({ approved: false }).sort({ createdAt: -1 });
+    const episodes = await Episode.find({ approved: false })
+      .populate('creator', 'name email avatar isBlocked')
+      .sort({ createdAt: -1 });
     res.json(episodes);
   } catch (err) {
     res.status(500).json({ message: err.message });
@@ -49,6 +51,7 @@ router.post('/', upload.single('audio'), async (req, res) => {
     description: req.body.description,
     category: req.body.category,
     author: req.body.author,
+    creator: req.body.creatorId,
     audioUrl: req.file ? `/uploads/${req.file.filename}` : '',
     duration: req.body.duration || '0:00',
     color: req.body.color || 'linear-gradient(135deg, #10ac84, #1dd1a1)',

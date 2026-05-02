@@ -89,6 +89,12 @@ export function UserDataProvider({ children }) {
     try {
       const isFormData = episodeData instanceof FormData;
       
+      // If user is logged in, add their ID
+      const savedUser = JSON.parse(localStorage.getItem('hc_user'));
+      if (isFormData && savedUser) {
+        episodeData.append('creatorId', savedUser.id);
+      }
+
       await fetch(API_URL, {
         method: 'POST',
         headers: isFormData ? {} : { 'Content-Type': 'application/json' },
@@ -119,6 +125,15 @@ export function UserDataProvider({ children }) {
     }
   };
 
+  const blockUser = async (userId) => {
+    try {
+      await fetch(`http://${window.location.hostname}:5000/api/auth/block/${userId}`, { method: 'PATCH' });
+      fetchEpisodes(); // Refresh list to see if user is blocked
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   const allEpisodes = dbEpisodes;
   const pendingEpisodes = pendingDbEpisodes;
   const customEpisodes = [...dbEpisodes, ...pendingDbEpisodes]; // Used in profile for counting uploads
@@ -128,7 +143,7 @@ export function UserDataProvider({ children }) {
       downloads, toggleDownload, 
       likes, toggleLike,
       history, playbackProgress, updatePlayback, getTopCategory,
-      customEpisodes, uploadEpisode, approveEpisode, deleteEpisode,
+      customEpisodes, uploadEpisode, approveEpisode, deleteEpisode, blockUser,
       allEpisodes, pendingEpisodes
     }}>
       {children}

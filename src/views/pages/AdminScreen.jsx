@@ -1,10 +1,19 @@
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, Check, Trash2, ShieldAlert } from 'lucide-react';
+import { ArrowLeft, Check, Trash2, ShieldAlert, Play, Pause, UserX, AlertTriangle } from 'lucide-react';
 import { useUserData } from '../../controllers/UserDataContext';
+import { useAudio } from '../../controllers/AudioContext';
 
 export default function AdminScreen() {
   const navigate = useNavigate();
-  const { pendingEpisodes, approveEpisode, deleteEpisode } = useUserData();
+  const { pendingEpisodes, approveEpisode, deleteEpisode, blockUser } = useUserData();
+  const { playEpisode, currentEpisode, isPlaying } = useAudio();
+
+  const handleBlock = async (userId, name) => {
+    if (window.confirm(`Are you sure you want to BLOCK ${name}? They will no longer be able to log in.`)) {
+      await blockUser(userId);
+      alert(`${name} has been blocked.`);
+    }
+  };
 
   return (
     <div className="screen scrollable">
@@ -27,33 +36,59 @@ export default function AdminScreen() {
       <h3 style={{ marginBottom: '16px' }}>Needs Review</h3>
       
       {pendingEpisodes.length > 0 ? pendingEpisodes.map(ep => (
-        <div key={ep.id} className="episode-card" style={{ padding: '16px', flexDirection: 'column', alignItems: 'stretch' }}>
+        <div key={ep.id} className="episode-card" style={{ padding: '16px', flexDirection: 'column', alignItems: 'stretch', position: 'relative' }}>
+          
           <div style={{ display: 'flex', gap: '16px', marginBottom: '16px' }}>
-            <div className="episode-thumb" style={{ background: ep.color }}></div>
+            <div className="episode-thumb" style={{ background: ep.color, position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <button 
+                className="btn-icon" 
+                style={{ background: 'rgba(255,255,255,0.2)', backdropFilter: 'blur(4px)', width: '40px', height: '40px' }}
+                onClick={() => playEpisode(ep)}
+              >
+                {currentEpisode?.id === ep.id && isPlaying ? <Pause size={20} fill="white" /> : <Play size={20} fill="white" />}
+              </button>
+            </div>
             <div className="episode-info">
               <div className="episode-title">{ep.title}</div>
-              <div className="episode-author">{ep.author} • {ep.category}</div>
-              <p style={{ fontSize: '12px', color: 'var(--text-muted)', marginTop: '4px', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
+              <div className="episode-author">By: {ep.author} ({ep.creator?.email || 'Unknown User'})</div>
+              <div style={{ fontSize: '12px', color: 'var(--accent-color)', fontWeight: 600, marginTop: '2px' }}>Category: {ep.category}</div>
+              <p style={{ fontSize: '12px', color: 'var(--text-muted)', marginTop: '8px', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
                 {ep.description || 'No description provided.'}
               </p>
             </div>
           </div>
           
-          <div style={{ display: 'flex', gap: '12px' }}>
+          {ep.creator?.isBlocked && (
+            <div style={{ background: 'rgba(255, 107, 107, 0.1)', padding: '8px 12px', borderRadius: '8px', display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px', border: '1px solid rgba(255, 107, 107, 0.2)' }}>
+              <AlertTriangle size={14} color="#ff6b6b" />
+              <span style={{ fontSize: '12px', color: '#ff6b6b', fontWeight: 600 }}>Uploader is already BLOCKED</span>
+            </div>
+          )}
+
+          <div style={{ display: 'flex', gap: '8px' }}>
             <button 
               className="btn btn-secondary" 
-              style={{ flex: 1, padding: '10px', color: '#ff6b6b', borderColor: 'rgba(255, 107, 107, 0.3)' }}
+              style={{ flex: 1, padding: '8px', color: '#ff6b6b', borderColor: 'rgba(255, 107, 107, 0.3)', fontSize: '13px' }}
               onClick={() => deleteEpisode(ep.id)}
             >
-              <Trash2 size={16} style={{ marginRight: '8px' }} /> Reject
+              <Trash2 size={14} style={{ marginRight: '6px' }} /> Reject
             </button>
             <button 
               className="btn btn-primary" 
-              style={{ flex: 1, padding: '10px' }}
+              style={{ flex: 1, padding: '8px', fontSize: '13px' }}
               onClick={() => approveEpisode(ep.id)}
             >
-              <Check size={16} style={{ marginRight: '8px' }} /> Approve
+              <Check size={14} style={{ marginRight: '6px' }} /> Approve
             </button>
+            {ep.creator && !ep.creator.isBlocked && (
+              <button 
+                className="btn btn-secondary" 
+                style={{ flex: 1, padding: '8px', color: '#ff4757', borderColor: 'rgba(255, 71, 87, 0.3)', fontSize: '13px' }}
+                onClick={() => handleBlock(ep.creator._id, ep.creator.name)}
+              >
+                <UserX size={14} style={{ marginRight: '6px' }} /> Block User
+              </button>
+            )}
           </div>
         </div>
       )) : (
