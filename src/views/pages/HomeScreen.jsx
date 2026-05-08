@@ -100,7 +100,7 @@ export default function HomeScreen() {
       {/* 🪐 Hero Universe Section */}
       <div style={{ marginBottom: '32px', position: 'relative' }}>
         <div style={{ position: 'absolute', top: '-20px', left: '-20px', right: '-20px', height: '150px', background: `radial-gradient(ellipse at top, ${currentMood.glow}, transparent)`, opacity: 0.2, zIndex: -1 }}></div>
-        <h1 className="glow-text" style={{ fontSize: '36px', marginBottom: '8px', lineHeight: 1.1 }}>Good Evening,<br/>Creator</h1>
+        <h1 className="glow-text" style={{ fontSize: '36px', marginBottom: '8px', lineHeight: 1.1 }}>{t('welcome')}<br/>Creator</h1>
         <p className="subtitle" style={{ fontSize: '16px' }}>Your audio universe is evolving with you</p>
       </div>
 
@@ -115,7 +115,7 @@ export default function HomeScreen() {
             type="text" 
             className="ai-search-input" 
             style={{ border: 'none', background: 'transparent' }}
-            placeholder="Ask HabeshaCast anything..."
+            placeholder={t('search')}
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
@@ -130,8 +130,8 @@ export default function HomeScreen() {
 
       {/* 🎧 Trending Universe Carousel */}
       <div className="section-header" style={{ marginBottom: '16px' }}>
-        <h2 style={{ marginBottom: 0, fontSize: '20px' }}>Trending Universe</h2>
-        <span style={{ color: 'var(--accent-color)', fontSize: '14px', fontWeight: 600 }}>DISCOVER ALL</span>
+        <h2 style={{ marginBottom: 0, fontSize: '20px' }}>{t('trending')}</h2>
+        <span style={{ color: 'var(--accent-color)', fontSize: '14px', fontWeight: 600 }}>{t('seeAll')}</span>
       </div>
       
       <div className="trending-carousel">
@@ -145,7 +145,7 @@ export default function HomeScreen() {
             </div>
             <div className="card-content">
               <div className="ai-badge" style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-                <Sparkles size={10} /> AI RECOMMENDED
+                <Sparkles size={10} /> {t('aiRecommended')}
               </div>
               <h3 style={{ fontSize: '22px', marginBottom: '8px', fontWeight: 800 }}>{ep.title}</h3>
               <p className="subtitle" style={{ fontSize: '12px', color: 'rgba(255,255,255,0.7)' }}>{ep.author} • {ep.category}</p>
@@ -180,7 +180,7 @@ export default function HomeScreen() {
 
       {/* 🔥 Neural Picks Grid */}
       <div className="section-header" style={{ marginTop: '32px', marginBottom: '16px' }}>
-        <h2 style={{ fontSize: '20px' }}>For You – Neural Picks</h2>
+        <h2 style={{ fontSize: '20px' }}>{t('neuralPicks')}</h2>
       </div>
       
       <div className="neural-grid">
@@ -219,7 +219,7 @@ export default function HomeScreen() {
           <div className="ripple-effect"></div>
           <div className="ripple-effect" style={{ animationDelay: '1s' }}></div>
         </div>
-        <h3 style={{ marginTop: '24px', fontSize: '20px', fontWeight: 800 }}>Create & Upload Audio</h3>
+        <h3 style={{ marginTop: '24px', fontSize: '20px', fontWeight: 800 }}>{t('uploadStudio')}</h3>
         <p className="subtitle" style={{ fontSize: '14px', marginTop: '4px' }}>AI-powered voice enhancement</p>
       </div>
 
@@ -227,7 +227,7 @@ export default function HomeScreen() {
       <div className="community-wave-section glass-panel" style={{ border: 'none', background: 'rgba(255,255,255,0.02)' }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', marginBottom: '8px' }}>
           <div className="pulse" style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#ff4757' }}></div>
-          <h3 style={{ margin: 0, fontSize: '15px', textTransform: 'uppercase', letterSpacing: '1px' }}>Live Sound Ocean</h3>
+          <h3 style={{ margin: 0, fontSize: '15px', textTransform: 'uppercase', letterSpacing: '1px' }}>{t('soundOcean')}</h3>
         </div>
         <p className="subtitle" style={{ fontSize: '12px' }}>Visualizing global creator resonance</p>
         

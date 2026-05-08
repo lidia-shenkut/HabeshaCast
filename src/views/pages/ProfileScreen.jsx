@@ -28,6 +28,13 @@ export default function ProfileScreen() {
     interests: user?.interests || ["Education", "History", "Storytelling"]
   });
 
+  const languages = [
+    { code: 'en', label: 'english' },
+    { code: 'am', label: 'amharic' },
+    { code: 'om', label: 'oromiffa' },
+    { code: 'ti', label: 'tigrinya' }
+  ];
+
   const fileInputRef = useRef(null);
   const avatarUrl = user?.avatar ? `http://${window.location.hostname}:5000${user.avatar}` : `https://ui-avatars.com/api/?name=${user?.name || 'Guest'}&background=6c5ce7&color=fff&size=200`;
 
@@ -65,22 +72,22 @@ export default function ProfileScreen() {
     switch (activeView) {
       case 'liked': 
         return { 
-          title: 'Liked Episodes', 
+          title: t('favorites'), 
           items: allEpisodes.filter(ep => likes.includes(ep.id)) 
         };
       case 'history': 
         return { 
-          title: 'Listening History', 
+          title: t('history'), 
           items: history.map(h => allEpisodes.find(ep => ep.id === h.id)).filter(Boolean) 
         };
       case 'downloads': 
         return { 
-          title: 'Downloaded Content', 
+          title: t('downloads'), 
           items: allEpisodes.filter(ep => downloads.includes(ep.id)) 
         };
       case 'uploads': 
         return { 
-          title: 'My Uploads', 
+          title: t('myUploads'), 
           items: customEpisodes 
         };
       default: return { title: '', items: [] };
@@ -96,7 +103,7 @@ export default function ProfileScreen() {
           <button className="btn-icon" onClick={() => setActiveView('main')}>
             <ArrowLeft size={20} />
           </button>
-          <h2 style={{ marginBottom: 0 }}>{activeView === 'settings' ? 'Settings' : listView.title}</h2>
+          <h2 style={{ marginBottom: 0 }}>{activeView === 'settings' ? t('settings') : listView.title}</h2>
           <div style={{ width: '40px' }}></div>
         </div>
 
@@ -115,10 +122,13 @@ export default function ProfileScreen() {
                 <span className="slider"></span>
               </label>
             </div>
-            <div className="preference-row" onClick={() => setLanguage(language === 'en' ? 'am' : 'en')}>
+            <div className="preference-row" onClick={() => {
+              const nextIdx = (languages.findIndex(l => l.code === language) + 1) % languages.length;
+              setLanguage(languages[nextIdx].code);
+            }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
                 <Globe size={20} color="var(--accent-color)" />
-                <span>Language: {language === 'en' ? 'English' : 'Amharic'}</span>
+                <span>{t('language')}: {t(languages.find(l => l.code === language).label)}</span>
               </div>
               <Edit2 size={16} />
             </div>
@@ -242,11 +252,11 @@ export default function ProfileScreen() {
         </div>
         <div className="stat-card" onClick={() => setActiveView('uploads')} style={{ cursor: 'pointer' }}>
           <div className="stat-value">{customEpisodes.length}</div>
-          <div className="stat-label">Uploads</div>
+          <div className="stat-label">{t('myUploads')}</div>
         </div>
         <div className="stat-card" onClick={() => setActiveView('liked')} style={{ cursor: 'pointer' }}>
           <div className="stat-value">{likes.length}</div>
-          <div className="stat-label">Favorites</div>
+          <div className="stat-label">{t('favorites')}</div>
         </div>
       </div>
 
@@ -268,24 +278,24 @@ export default function ProfileScreen() {
       <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
         <div className="episode-card" style={{ alignItems: 'center' }} onClick={() => setActiveView('liked')}>
           <Heart size={20} color="var(--text-muted)" style={{ margin: '0 8px' }} />
-          <div style={{ flex: 1, fontSize: '16px', fontWeight: 500 }}>Liked Episodes ({likes.length})</div>
+          <div style={{ flex: 1, fontSize: '16px', fontWeight: 500 }}>{t('favorites')} ({likes.length})</div>
           <ArrowRight size={16} color="var(--text-muted)" />
         </div>
         <div className="episode-card" style={{ alignItems: 'center' }} onClick={() => setActiveView('downloads')}>
           <Download size={20} color="var(--text-muted)" style={{ margin: '0 8px' }} />
-          <div style={{ flex: 1, fontSize: '16px', fontWeight: 500 }}>Downloaded Content</div>
+          <div style={{ flex: 1, fontSize: '16px', fontWeight: 500 }}>{t('downloads')}</div>
           <ArrowRight size={16} color="var(--text-muted)" />
         </div>
         <div className="episode-card" style={{ alignItems: 'center' }} onClick={() => setActiveView('history')}>
           <Clock size={20} color="var(--text-muted)" style={{ margin: '0 8px' }} />
-          <div style={{ flex: 1, fontSize: '16px', fontWeight: 500 }}>Listening History ({history.length})</div>
+          <div style={{ flex: 1, fontSize: '16px', fontWeight: 500 }}>{t('history')} ({history.length})</div>
           <ArrowRight size={16} color="var(--text-muted)" />
         </div>
 
         {user?.role === 'admin' && (
           <div className="episode-card" style={{ alignItems: 'center' }} onClick={() => navigate('/admin')}>
             <ShieldAlert size={20} color="#ff9f43" style={{ margin: '0 8px' }} />
-            <div style={{ flex: 1, fontSize: '16px', fontWeight: 500, color: '#ff9f43' }}>Admin Panel</div>
+            <div style={{ flex: 1, fontSize: '16px', fontWeight: 500, color: '#ff9f43' }}>{t('adminDashboard')}</div>
             {pendingEpisodes.length > 0 && (
               <div style={{ background: '#ff9f43', color: 'white', borderRadius: '12px', padding: '2px 8px', fontSize: '12px', fontWeight: 'bold' }}>
                 {pendingEpisodes.length}
@@ -297,7 +307,7 @@ export default function ProfileScreen() {
       </div>
 
       <button className="btn btn-secondary" onClick={handleLogout} style={{ marginTop: '40px', color: '#ff6b6b', borderColor: 'rgba(255, 107, 107, 0.3)' }}>
-        <LogOut size={20} /> Log Out
+        <LogOut size={20} /> {t('logout')}
       </button>
     </div>
   );
