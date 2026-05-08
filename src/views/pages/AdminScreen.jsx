@@ -2,11 +2,13 @@ import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, Check, Trash2, ShieldAlert, Play, Pause, UserX, AlertTriangle } from 'lucide-react';
 import { useUserData } from '../../controllers/UserDataContext';
 import { useAudio } from '../../controllers/AudioContext';
+import { useLanguage } from '../../controllers/LanguageContext';
 
 export default function AdminScreen() {
   const navigate = useNavigate();
   const { pendingEpisodes, approveEpisode, deleteEpisode, blockUser } = useUserData();
   const { playEpisode, currentEpisode, isPlaying } = useAudio();
+  const { t } = useLanguage();
 
   const handleBlock = async (userId, name) => {
     if (window.confirm(`Are you sure you want to BLOCK ${name}? They will no longer be able to log in.`)) {
@@ -19,7 +21,7 @@ export default function AdminScreen() {
     <div className="screen scrollable">
       <div className="top-nav">
         <button className="btn-icon" onClick={() => navigate(-1)}><ArrowLeft size={20} /></button>
-        <h2 style={{ marginBottom: 0 }}>Admin Dashboard</h2>
+        <h2 style={{ marginBottom: 0 }}>{t('adminDashboard')}</h2>
         <div style={{ width: '40px' }}></div>
       </div>
 
@@ -28,12 +30,12 @@ export default function AdminScreen() {
           <ShieldAlert size={24} color="#ff9f43" />
         </div>
         <div>
-          <h4 style={{ fontSize: '14px', color: 'var(--text-muted)', marginBottom: '4px' }}>Pending Approvals</h4>
+          <h4 style={{ fontSize: '14px', color: 'var(--text-muted)', marginBottom: '4px' }}>{t('needsReview')}</h4>
           <div style={{ fontSize: '18px', fontWeight: '600' }}>{pendingEpisodes.length} Episodes</div>
         </div>
       </div>
 
-      <h3 style={{ marginBottom: '16px' }}>Needs Review</h3>
+      <h3 style={{ marginBottom: '16px' }}>{t('needsReview')}</h3>
       
       {pendingEpisodes.length > 0 ? pendingEpisodes.map(ep => (
         <div key={ep.id} className="episode-card" style={{ padding: '16px', flexDirection: 'column', alignItems: 'stretch', position: 'relative' }}>
@@ -71,14 +73,14 @@ export default function AdminScreen() {
               style={{ flex: 1, padding: '8px', color: '#ff6b6b', borderColor: 'rgba(255, 107, 107, 0.3)', fontSize: '13px' }}
               onClick={() => deleteEpisode(ep.id)}
             >
-              <Trash2 size={14} style={{ marginRight: '6px' }} /> Reject
+              <Trash2 size={14} style={{ marginRight: '6px' }} /> {t('reject')}
             </button>
             <button 
               className="btn btn-primary" 
               style={{ flex: 1, padding: '8px', fontSize: '13px' }}
               onClick={() => approveEpisode(ep.id)}
             >
-              <Check size={14} style={{ marginRight: '6px' }} /> Approve
+              <Check size={14} style={{ marginRight: '6px' }} /> {t('approve')}
             </button>
             {ep.creator && !ep.creator.isBlocked && (
               <button 
@@ -86,7 +88,7 @@ export default function AdminScreen() {
                 style={{ flex: 1, padding: '8px', color: '#ff4757', borderColor: 'rgba(255, 71, 87, 0.3)', fontSize: '13px' }}
                 onClick={() => handleBlock(ep.creator._id, ep.creator.name)}
               >
-                <UserX size={14} style={{ marginRight: '6px' }} /> Block User
+                <UserX size={14} style={{ marginRight: '6px' }} /> {t('blockUser')}
               </button>
             )}
           </div>
