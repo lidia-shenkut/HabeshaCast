@@ -190,7 +190,7 @@ export default function UploadScreen() {
         <h1 style={{ color: 'var(--text-main)' }}>Upload Complete!</h1>
         <p className="subtitle">Your masterpiece is live and ready for the world.</p>
         <button className="btn btn-primary" style={{ marginTop: '32px' }} onClick={() => navigate('/profile')}>
-          Go to Profile
+          {t('profile')}
         </button>
       </div>
     );
@@ -199,7 +199,7 @@ export default function UploadScreen() {
   return (
     <div className="screen scrollable">
       <div className="top-nav">
-        <h2 style={{ marginBottom: 0 }}>Publish New Episode</h2>
+        <h2 style={{ marginBottom: 0 }}>{t('upload')}</h2>
         <div className="nav-actions">
           <button className="btn-icon" onClick={() => navigate(-1)}><X size={20} /></button>
         </div>
@@ -392,7 +392,7 @@ export default function UploadScreen() {
 
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
           <div className="input-group">
-            <label className="editable-label" style={{ marginBottom: '8px', display: 'block' }}>Category</label>
+            <label className="editable-label" style={{ marginBottom: '8px', display: 'block' }}>{t('categories')}</label>
             <select className="input-field" value={category} onChange={(e) => setCategory(e.target.value)}>
               <option value="" disabled>Select</option>
               <option value="Education">Education</option>
@@ -403,12 +403,12 @@ export default function UploadScreen() {
             </select>
           </div>
           <div className="input-group">
-            <label className="editable-label" style={{ marginBottom: '8px', display: 'block' }}>Language</label>
+            <label className="editable-label" style={{ marginBottom: '8px', display: 'block' }}>{t('language')}</label>
             <select className="input-field" value={language} onChange={(e) => setLanguage(e.target.value)}>
-              <option value="English">English</option>
-              <option value="Amharic">Amharic</option>
-              <option value="Oromiffa">Oromiffa</option>
-              <option value="Tigrinya">Tigrinya</option>
+              <option value="English">{t('english')}</option>
+              <option value="Amharic">{t('amharic')}</option>
+              <option value="Oromiffa">{t('oromiffa')}</option>
+              <option value="Tigrinya">{t('tigrinya')}</option>
             </select>
           </div>
         </div>
@@ -421,7 +421,7 @@ export default function UploadScreen() {
               Back
             </button>
             <button className="btn btn-primary" style={{ flex: 2 }} onClick={() => setSuccess(true)}>
-              Publish Now <ArrowRight size={20} style={{ marginLeft: '8px' }} />
+              {t('upload')} <ArrowRight size={20} style={{ marginLeft: '8px' }} />
             </button>
           </>
         ) : (

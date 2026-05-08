@@ -17,7 +17,7 @@ export default function BottomNav() {
       </Link>
       <Link to="/explore" className={`nav-item ${path === '/explore' ? 'active' : ''}`}>
         <Compass size={24} />
-        <span>Explore</span>
+        <span>{t('explore')}</span>
       </Link>
       <Link to="/upload" className={`nav-item ${path === '/upload' ? 'active' : ''}`}>
         <PlusSquare size={24} />
