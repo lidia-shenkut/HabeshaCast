@@ -43,7 +43,7 @@ const translations = {
 
 export function LanguageProvider({ children }) {
   const [language, setLanguage] = useState(() => {
-    return localStorage.getItem('hc_lang') || 'en';
+    return localStorage.getItem('hc_lang') || 'am';
   });
 
   useEffect(() => {
