@@ -19,12 +19,14 @@ import {
   Bell
 } from 'lucide-react';
 import { useUserData } from '../../controllers/UserDataContext';
+import { useLanguage } from '../../controllers/LanguageContext';
 import centralFigure from '../../assets/central_figure.png';
 
 
 export default function ExploreScreen() {
   const navigate = useNavigate();
   const { allEpisodes } = useUserData();
+  const { t } = useLanguage();
   const [activeMood, setActiveMood] = useState('Focus');
 
   const moods = [
@@ -53,7 +55,7 @@ export default function ExploreScreen() {
           <Filter size={18} />
         </div>
         <div style={{ textAlign: 'center' }}>
-          <h2 style={{ margin: 0, fontSize: '18px', fontWeight: 600 }}>Explore</h2>
+          <h2 style={{ margin: 0, fontSize: '18px', fontWeight: 600 }}>{t('explore')}</h2>
           <p className="subtitle" style={{ fontSize: '10px', letterSpacing: '2px', textTransform: 'uppercase' }}>Discover. Listen. Connect.</p>
         </div>
         <div style={{ display: 'flex', gap: '8px' }}>
@@ -72,7 +74,7 @@ export default function ExploreScreen() {
           <Search size={20} color="var(--accent-color)" style={{ marginRight: '12px' }} />
           <input 
             type="text" 
-            placeholder="Search podcasts, music, creators..."
+            placeholder={t('search')}
             style={{ background: 'transparent', border: 'none', color: 'white', flex: 1, outline: 'none' }}
           />
           <div style={{ background: 'var(--secondary-color)', padding: '8px', borderRadius: '50%', display: 'flex' }}>
@@ -121,7 +123,7 @@ export default function ExploreScreen() {
       <div className="section-header" style={{ marginTop: '20px' }}>
         <h2 style={{ fontSize: '18px' }}>AI Picks For You</h2>
         <div style={{ display: 'flex', alignItems: 'center', color: 'var(--text-secondary)', fontSize: '12px' }}>
-          See all <ChevronRight size={14} />
+          {t('seeAll')} <ChevronRight size={14} />
         </div>
       </div>
 
@@ -147,7 +149,7 @@ export default function ExploreScreen() {
             <h4 style={{ fontSize: '14px', margin: '0 0 4px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{ep.title}</h4>
             <p className="subtitle" style={{ fontSize: '11px' }}>{ep.category}</p>
             <div className="ai-badge" style={{ fontSize: '8px', padding: '2px 6px', marginTop: '8px', background: 'rgba(255,255,255,0.05)', color: 'var(--text-secondary)' }}>
-              {['🔥 Motivational', '🧠 Learn', '🌙 Calm', '⚡ Energy'][i % 4]}
+              {t('aiRecommended')}
             </div>
           </div>
         ))}
@@ -155,7 +157,7 @@ export default function ExploreScreen() {
 
       {/* Trending Around You */}
       <div className="section-header" style={{ marginTop: '30px' }}>
-        <h2 style={{ fontSize: '18px' }}>Trending Around You</h2>
+        <h2 style={{ fontSize: '18px' }}>{t('trending')}</h2>
         <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
           <div className="pulse" style={{ width: '6px', height: '6px', background: '#ff4757', borderRadius: '50%' }}></div>
           <span style={{ fontSize: '11px', color: '#ff4757', fontWeight: 600 }}>Live Now</span>
@@ -176,4 +178,3 @@ export default function ExploreScreen() {
     </div>
   );
 }
-
