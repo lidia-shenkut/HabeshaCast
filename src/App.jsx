@@ -22,6 +22,7 @@ import ExploreScreen from './views/pages/ExploreScreen';
 
 import { LanguageProvider } from './controllers/LanguageContext';
 import { AudioProvider } from './controllers/AudioContext';
+import { SettingsProvider } from './controllers/SettingsContext';
 
 function App() {
   return (
@@ -29,7 +30,8 @@ function App() {
       <LanguageProvider>
         <AuthProvider>
           <UserDataProvider>
-            <AudioProvider>
+            <SettingsProvider>
+              <AudioProvider>
               <Router>
               <div className="app-container">
                 <Routes>
@@ -48,8 +50,9 @@ function App() {
               </div>
             </Router>
             </AudioProvider>
-          </UserDataProvider>
-        </AuthProvider>
+          </SettingsProvider>
+        </UserDataProvider>
+      </AuthProvider>
       </LanguageProvider>
     </ThemeProvider>
   );
