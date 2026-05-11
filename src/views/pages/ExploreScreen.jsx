@@ -37,12 +37,12 @@ export default function ExploreScreen() {
   ];
 
   const categories = [
-    { name: 'Podcasts', icon: <Headphones size={20} /> },
-    { name: 'Music', icon: <Music size={20} /> },
-    { name: 'African Voices', icon: <Globe size={20} /> },
-    { name: 'Trending', icon: <TrendingUp size={20} /> },
-    { name: 'Creators', icon: <Filter size={20} /> },
-    { name: 'Chill Space', icon: <Moon size={20} /> }
+    { id: 'Podcasts', name: 'Podcasts', icon: <Headphones size={20} /> },
+    { id: 'Music', name: 'Music', icon: <Music size={20} /> },
+    { id: 'African Voices', name: 'African Voices', icon: <Globe size={20} /> },
+    { id: 'Trending', name: 'Trending', icon: <TrendingUp size={20} /> },
+    { id: 'Creators', name: 'Creators', icon: <Filter size={20} /> },
+    { id: 'Chill Space', name: 'Chill Space', icon: <Moon size={20} /> }
   ];
 
   return (
@@ -99,7 +99,10 @@ export default function ExploreScreen() {
           <div 
             key={mood.name} 
             className={`mood-node ${mood.class} ${activeMood === mood.name ? 'active' : ''}`}
-            onClick={() => setActiveMood(mood.name)}
+            onClick={() => {
+              setActiveMood(mood.name);
+              // Filter by mood could also navigate or filter content here
+            }}
           >
             {mood.icon}
             <span className="mood-label-floating">{mood.name}</span>
@@ -110,7 +113,7 @@ export default function ExploreScreen() {
       {/* Horizontal Categories */}
       <div className="horizontal-categories">
         {categories.map((cat, i) => (
-          <div key={i} className="cat-pill">
+          <div key={i} className="cat-pill" onClick={() => navigate(`/category/${cat.id}`)}>
             <div className="cat-icon-box">
               {cat.icon}
             </div>
