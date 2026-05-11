@@ -125,13 +125,13 @@ export default function ExploreScreen() {
       {/* AI Picks For You */}
       <div className="section-header" style={{ marginTop: '20px' }}>
         <h2 style={{ fontSize: '18px' }}>AI Picks For You</h2>
-        <div style={{ display: 'flex', alignItems: 'center', color: 'var(--text-secondary)', fontSize: '12px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', color: 'var(--text-secondary)', fontSize: '12px', cursor: 'pointer' }} onClick={() => navigate('/category/Explore')}>
           {t('seeAll')} <ChevronRight size={14} />
         </div>
       </div>
 
       <div style={{ display: 'flex', gap: '16px', overflowX: 'auto', padding: '10px 0', margin: '0 -20px', paddingLeft: '20px' }}>
-        {allEpisodes.slice(0, 4).map((ep, i) => (
+        {allEpisodes.slice(0, 6).map((ep, i) => (
           <div key={ep.id} className="ai-pick-card" onClick={() => navigate(`/player/${ep.id}`)}>
             <div className="ai-pick-thumb" style={{ background: ep.color || 'var(--primary-color)' }}>
               <div className="habesha-pattern" style={{ opacity: 0.1 }}></div>
@@ -168,14 +168,22 @@ export default function ExploreScreen() {
       </div>
 
       <div style={{ display: 'flex', gap: '16px', overflowX: 'auto', paddingBottom: '20px', margin: '0 -20px', paddingLeft: '20px' }}>
-        {['Habesha Podcast', 'Addis Soundwaves', 'African Storytellers'].map((title, i) => (
-          <div key={i} className="glass-panel" style={{ minWidth: '200px', padding: '16px', borderRadius: '24px' }}>
-            <p style={{ fontSize: '12px', fontWeight: 600, marginBottom: '8px' }}>{title}</p>
+        {allEpisodes.filter(ep => ep.category === 'Trending').map((ep, i) => (
+          <div key={ep.id} className="glass-panel" style={{ minWidth: '220px', padding: '16px', borderRadius: '24px', cursor: 'pointer' }} onClick={() => navigate(`/player/${ep.id}`)}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
+              <div className="ai-badge" style={{ margin: 0, fontSize: '9px' }}>HOT NOW</div>
+              <TrendingUp size={14} color="var(--accent-color)" />
+            </div>
+            <p style={{ fontSize: '14px', fontWeight: 600, marginBottom: '4px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{ep.title}</p>
+            <p className="subtitle" style={{ fontSize: '11px', marginBottom: '12px' }}>{ep.author}</p>
             <div style={{ height: '4px', background: 'rgba(255,255,255,0.05)', borderRadius: '2px', overflow: 'hidden' }}>
-              <div style={{ width: '60%', height: '100%', background: 'var(--accent-color)' }}></div>
+              <div style={{ width: `${60 + Math.random() * 30}%`, height: '100%', background: 'var(--accent-color)' }}></div>
             </div>
           </div>
         ))}
+        {allEpisodes.filter(ep => ep.category === 'Trending').length === 0 && (
+          <p style={{ color: 'var(--text-muted)', fontSize: '13px', padding: '10px' }}>No trending episodes right now.</p>
+        )}
       </div>
 
     </div>
