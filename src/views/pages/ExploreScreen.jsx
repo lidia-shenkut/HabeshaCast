@@ -23,7 +23,6 @@ import { useUserData } from '../../controllers/UserDataContext';
 import { useLanguage } from '../../controllers/LanguageContext';
 import centralFigure from '../../assets/central_figure.png';
 
-
 export default function ExploreScreen() {
   const navigate = useNavigate();
   const { allEpisodes } = useUserData();
@@ -59,9 +58,8 @@ export default function ExploreScreen() {
     <div className="screen scrollable explore-screen">
       <div className="geez-overlay"></div>
       
-      {/* AI Assistant Overlay */}
       {showAIAssistant && (
-        <div className="ai-assistant-overlay" style={{ animation: 'fadeIn 0.3s ease' }}>
+        <div className="ai-assistant-overlay">
           <div className="glass-panel ai-card" style={{ width: '85%', padding: '30px', textAlign: 'center', position: 'relative' }}>
             <button className="btn-icon" style={{ position: 'absolute', top: 15, right: 15 }} onClick={() => setShowAIAssistant(false)}>
               <X size={20} />
@@ -94,7 +92,6 @@ export default function ExploreScreen() {
         </div>
       )}
 
-      {/* Top Header */}
       <div className="top-nav" style={{ marginBottom: '16px' }}>
         <div className="btn-icon glass-panel" style={{ borderRadius: '12px' }}>
           <Filter size={18} />
@@ -113,7 +110,6 @@ export default function ExploreScreen() {
         </div>
       </div>
 
-      {/* AI Search Portal */}
       <div className="ai-search-orb-container" style={{ padding: '0 0 20px' }}>
         <div className="ai-search-orb" style={{ maxWidth: '100%' }}>
           <Search size={20} color="var(--accent-color)" style={{ marginRight: '12px' }} />
@@ -128,16 +124,10 @@ export default function ExploreScreen() {
         </div>
       </div>
 
-      {/* 🌟 CENTRAL FIGURE & MOOD ORBIT */}
       <div className="central-orb-section">
         <div className="mood-orbit-path"></div>
-        
         <div className="main-avatar-container" onClick={handleAIClick} style={{ cursor: 'pointer' }}>
-          <img 
-            src={centralFigure} 
-            alt="Central AI Guide" 
-            className="avatar-image" 
-          />
+          <img src={centralFigure} alt="Central AI Guide" className="avatar-image" />
           <div className="ai-glow-ring"></div>
         </div>
 
@@ -145,10 +135,7 @@ export default function ExploreScreen() {
           <div 
             key={mood.name} 
             className={`mood-node ${mood.class} ${activeMood === mood.name ? 'active' : ''}`}
-            onClick={() => {
-              setActiveMood(mood.name);
-              // Filter by mood could also navigate or filter content here
-            }}
+            onClick={() => setActiveMood(mood.name)}
           >
             {mood.icon}
             <span className="mood-label-floating">{mood.name}</span>
@@ -156,19 +143,15 @@ export default function ExploreScreen() {
         ))}
       </div>
 
-      {/* Horizontal Categories */}
       <div className="horizontal-categories">
         {categories.map((cat, i) => (
           <div key={i} className="cat-pill" onClick={() => navigate(`/category/${cat.id}`)}>
-            <div className="cat-icon-box">
-              {cat.icon}
-            </div>
+            <div className="cat-icon-box">{cat.icon}</div>
             <span style={{ fontSize: '11px', color: 'var(--text-secondary)' }}>{cat.name}</span>
           </div>
         ))}
       </div>
 
-      {/* AI Picks For You */}
       <div className="section-header" style={{ marginTop: '20px' }}>
         <h2 style={{ fontSize: '18px' }}>AI Picks For You</h2>
         <div style={{ display: 'flex', alignItems: 'center', color: 'var(--text-secondary)', fontSize: '12px', cursor: 'pointer' }} onClick={() => navigate('/category/Explore')}>
@@ -186,52 +169,25 @@ export default function ExploreScreen() {
                   <Play size={14} fill="white" />
                 </div>
               </div>
-              <div style={{ position: 'absolute', bottom: '8px', left: '8px' }}>
-                 {/* Mini Waveform */}
-                 <div style={{ display: 'flex', gap: '1px', alignItems: 'flex-end', height: '12px' }}>
-                    {[...Array(8)].map((_, j) => (
-                      <div key={j} style={{ width: '2px', height: `${20 + Math.random() * 80}%`, background: 'white', borderRadius: '1px' }}></div>
-                    ))}
-                 </div>
-              </div>
             </div>
             <h4 style={{ fontSize: '14px', margin: '0 0 4px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{ep.title}</h4>
             <p className="subtitle" style={{ fontSize: '11px' }}>{ep.category}</p>
-            <div className="ai-badge" style={{ fontSize: '8px', padding: '2px 6px', marginTop: '8px', background: 'rgba(255,255,255,0.05)', color: 'var(--text-secondary)' }}>
-              {t('aiRecommended')}
-            </div>
           </div>
         ))}
       </div>
 
-      {/* Trending Around You */}
       <div className="section-header" style={{ marginTop: '30px' }}>
         <h2 style={{ fontSize: '18px' }}>{t('trending')}</h2>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-          <div className="pulse" style={{ width: '6px', height: '6px', background: '#ff4757', borderRadius: '50%' }}></div>
-          <span style={{ fontSize: '11px', color: '#ff4757', fontWeight: 600 }}>Live Now</span>
-        </div>
       </div>
 
       <div style={{ display: 'flex', gap: '16px', overflowX: 'auto', paddingBottom: '20px', margin: '0 -20px', paddingLeft: '20px' }}>
         {allEpisodes.filter(ep => ep.category === 'Trending').map((ep, i) => (
           <div key={ep.id} className="glass-panel" style={{ minWidth: '220px', padding: '16px', borderRadius: '24px', cursor: 'pointer' }} onClick={() => navigate(`/player/${ep.id}`)}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
-              <div className="ai-badge" style={{ margin: 0, fontSize: '9px' }}>HOT NOW</div>
-              <TrendingUp size={14} color="var(--accent-color)" />
-            </div>
-            <p style={{ fontSize: '14px', fontWeight: 600, marginBottom: '4px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{ep.title}</p>
-            <p className="subtitle" style={{ fontSize: '11px', marginBottom: '12px' }}>{ep.author}</p>
-            <div style={{ height: '4px', background: 'rgba(255,255,255,0.05)', borderRadius: '2px', overflow: 'hidden' }}>
-              <div style={{ width: `${60 + Math.random() * 30}%`, height: '100%', background: 'var(--accent-color)' }}></div>
-            </div>
+            <p style={{ fontSize: '14px', fontWeight: 600, marginBottom: '4px' }}>{ep.title}</p>
+            <p className="subtitle" style={{ fontSize: '11px' }}>{ep.author}</p>
           </div>
         ))}
-        {allEpisodes.filter(ep => ep.category === 'Trending').length === 0 && (
-          <p style={{ color: 'var(--text-muted)', fontSize: '13px', padding: '10px' }}>No trending episodes right now.</p>
-        )}
       </div>
-
     </div>
   );
 }
