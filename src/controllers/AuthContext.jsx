@@ -57,8 +57,19 @@ export function AuthProvider({ children }) {
     setUser(data);
   };
 
+  const changePassword = async (oldPassword, newPassword) => {
+    if (!user) return;
+    const res = await fetch(`${API_URL}/change-password/${user.id}`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ oldPassword, newPassword })
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.message);
+  };
+
   return (
-    <AuthContext.Provider value={{ user, login, register, logout, updateProfile }}>
+    <AuthContext.Provider value={{ user, login, register, logout, updateProfile, changePassword }}>
       {children}
     </AuthContext.Provider>
   );
