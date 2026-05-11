@@ -109,8 +109,19 @@ export default function ProfileScreen() {
             <ArrowLeft size={20} />
           </button>
           <h2 style={{ marginBottom: 0 }}>{listView.title}</h2>
-          <div style={{ width: '40px' }}></div>
         </div>
+        
+        {activeView === 'downloads' && listView.items.length > 0 && (
+          <div className="glass-panel" style={{ margin: '0 20px 20px', padding: '16px', border: '1px solid var(--accent-color)' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px' }}>
+              <span style={{ fontSize: '11px', fontWeight: 800, textTransform: 'uppercase', color: 'var(--accent-color)' }}>Offline Storage</span>
+              <span style={{ fontSize: '12px', fontWeight: 600 }}>124 MB / 1 GB</span>
+            </div>
+            <div style={{ width: '100%', height: '4px', background: 'rgba(255,255,255,0.05)', borderRadius: '2px' }}>
+              <div style={{ width: '12%', height: '100%', background: 'var(--accent-color)', borderRadius: '2px' }}></div>
+            </div>
+          </div>
+        )}
 
         <div>
           {listView.items.length > 0 ? listView.items.map(ep => (
@@ -229,8 +240,40 @@ export default function ProfileScreen() {
           <div style={{ fontSize: '18px', fontWeight: '700' }}>{topCategory} Explorer</div>
           <div style={{ width: '100%', height: '4px', background: 'var(--bg-input)', borderRadius: '2px', marginTop: '8px' }}>
             <div style={{ width: '70%', height: '100%', background: 'var(--accent-color)', borderRadius: '2px' }}></div>
-          </div>
         </div>
+      </div>
+
+      {/* Culture Explorer Awards */}
+      <div className="section-header" style={{ marginTop: '20px', marginBottom: '16px' }}>
+        <h3 style={{ fontSize: '18px' }}>Culture Explorer Awards</h3>
+        <span style={{ fontSize: '11px', color: 'var(--accent-color)', fontWeight: 700 }}>4/12 UNLOCKED</span>
+      </div>
+      <div style={{ display: 'flex', gap: '16px', overflowX: 'auto', padding: '4px', margin: '0 -20px', paddingLeft: '20px', paddingBottom: '20px' }}>
+        {[
+          { name: 'Axum Explorer', icon: <Globe size={20} />, color: '#ffd700', unlocked: true },
+          { name: 'Night Owl', icon: <Moon size={20} />, color: '#a855f7', unlocked: true },
+          { name: 'Trendsetter', icon: <Zap size={20} />, color: '#ff4757', unlocked: true },
+          { name: 'Audio Scholar', icon: <Brain size={20} />, color: '#00d2ff', unlocked: true },
+          { name: 'Ethio-Jazz Fan', icon: <Music size={20} />, color: '#ff9f43', unlocked: false },
+          { name: 'Top Creator', icon: <Mic size={20} />, color: '#1dd1a1', unlocked: false },
+        ].map((award, i) => (
+          <div key={i} className="glass-panel" style={{ 
+            minWidth: '90px', padding: '16px 10px', textAlign: 'center', 
+            opacity: award.unlocked ? 1 : 0.3,
+            border: award.unlocked ? `1px solid ${award.color}44` : '1px solid rgba(255,255,255,0.05)'
+          }}>
+            <div style={{ 
+              width: '40px', height: '40px', borderRadius: '50%', 
+              background: award.unlocked ? award.color : 'rgba(255,255,255,0.05)',
+              color: award.unlocked ? 'black' : 'white',
+              display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 10px',
+              boxShadow: award.unlocked ? `0 0 15px ${award.color}66` : 'none'
+            }}>
+              {award.icon}
+            </div>
+            <span style={{ fontSize: '10px', fontWeight: 700, whiteSpace: 'nowrap' }}>{award.name}</span>
+          </div>
+        ))}
       </div>
 
       {/* Profile Links */}
