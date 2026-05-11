@@ -16,7 +16,8 @@ import {
   Heart,
   ChevronRight,
   Filter,
-  Bell
+  Bell,
+  X
 } from 'lucide-react';
 import { useUserData } from '../../controllers/UserDataContext';
 import { useLanguage } from '../../controllers/LanguageContext';
@@ -28,6 +29,8 @@ export default function ExploreScreen() {
   const { allEpisodes } = useUserData();
   const { t } = useLanguage();
   const [activeMood, setActiveMood] = useState('Focus');
+  const [showAIAssistant, setShowAIAssistant] = useState(false);
+  const [aiStep, setAiStep] = useState(0); // 0: listening, 1: thinking, 2: responding
 
   const moods = [
     { name: 'Focus', icon: <Brain size={20} />, class: 'focus' },
@@ -35,6 +38,13 @@ export default function ExploreScreen() {
     { name: 'Relax', icon: <Coffee size={20} />, class: 'relax' },
     { name: 'Night', icon: <Moon size={20} />, class: 'night' }
   ];
+
+  const handleAIClick = () => {
+    setShowAIAssistant(true);
+    setAiStep(0);
+    setTimeout(() => setAiStep(1), 3000);
+    setTimeout(() => setAiStep(2), 5000);
+  };
 
   const categories = [
     { id: 'Podcasts', name: 'Podcasts', icon: <Headphones size={20} /> },
@@ -49,6 +59,41 @@ export default function ExploreScreen() {
     <div className="screen scrollable explore-screen">
       <div className="geez-overlay"></div>
       
+      {/* AI Assistant Overlay */}
+      {showAIAssistant && (
+        <div className="ai-assistant-overlay" style={{ animation: 'fadeIn 0.3s ease' }}>
+          <div className="glass-panel ai-card" style={{ width: '85%', padding: '30px', textAlign: 'center', position: 'relative' }}>
+            <button className="btn-icon" style={{ position: 'absolute', top: 15, right: 15 }} onClick={() => setShowAIAssistant(false)}>
+              <X size={20} />
+            </button>
+            
+            <div className={`ai-orb-large ${aiStep === 0 ? 'listening' : aiStep === 1 ? 'thinking' : ''}`}>
+              <img src={centralFigure} alt="AI" />
+            </div>
+            
+            <h3 style={{ marginTop: '20px', fontSize: '20px' }}>
+              {aiStep === 0 ? "Listening..." : aiStep === 1 ? "Thinking..." : "Habesha AI Guide"}
+            </h3>
+            
+            <p style={{ color: 'var(--text-muted)', minHeight: '60px', marginTop: '10px' }}>
+              {aiStep === 0 && "Try: 'Play some Ethio-Jazz' or 'Tell me about Axum'"}
+              {aiStep === 1 && "Searching the Habesha Universe..."}
+              {aiStep === 2 && "I've found a special collection of Axumite history and traditional jazz for you. Ready to explore?"}
+            </p>
+            
+            {aiStep === 2 && (
+              <button className="btn btn-primary" style={{ width: '100%', marginTop: '20px' }} onClick={() => navigate('/category/African Voices')}>
+                Start Exploring
+              </button>
+            )}
+            
+            <div className="voice-waves" style={{ display: aiStep === 0 ? 'flex' : 'none' }}>
+              {[...Array(5)].map((_, i) => <div key={i} className="wave-bar"></div>)}
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Top Header */}
       <div className="top-nav" style={{ marginBottom: '16px' }}>
         <div className="btn-icon glass-panel" style={{ borderRadius: '12px' }}>
@@ -77,7 +122,7 @@ export default function ExploreScreen() {
             placeholder={t('search')}
             style={{ background: 'transparent', border: 'none', color: 'white', flex: 1, outline: 'none' }}
           />
-          <div style={{ background: 'var(--secondary-color)', padding: '8px', borderRadius: '50%', display: 'flex' }}>
+          <div style={{ background: 'var(--secondary-color)', padding: '8px', borderRadius: '50%', display: 'flex', cursor: 'pointer' }} onClick={handleAIClick}>
             <Mic size={18} color="white" />
           </div>
         </div>
@@ -87,12 +132,13 @@ export default function ExploreScreen() {
       <div className="central-orb-section">
         <div className="mood-orbit-path"></div>
         
-        <div className="main-avatar-container">
+        <div className="main-avatar-container" onClick={handleAIClick} style={{ cursor: 'pointer' }}>
           <img 
             src={centralFigure} 
             alt="Central AI Guide" 
             className="avatar-image" 
           />
+          <div className="ai-glow-ring"></div>
         </div>
 
         {moods.map((mood) => (
