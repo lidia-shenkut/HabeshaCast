@@ -34,7 +34,20 @@ const translations = {
     uploadStudio: "Create & Upload Audio",
     aiRecommended: "AI RECOMMENDED",
     neuralPicks: "For You – Neural Picks",
-    soundOcean: "Live Sound Ocean"
+    soundOcean: "Live Sound Ocean",
+    loginTitle: "Log In",
+    registerTitle: "Create Account",
+    fullName: "Full Name",
+    email: "Email Address",
+    password: "Password",
+    alreadyAccount: "Already have an account? Log In",
+    noAccount: "Create an Account",
+    loginSubtitle: "Listen to the voices of Ethiopia",
+    mostPopular: "Most Popular",
+    newReleases: "New Releases",
+    offlineAvailable: "Offline Available",
+    noEpisodes: "No episodes found in this category yet.",
+    discoverSubtitle: "Discover. Listen. Connect."
   },
   am: {
     welcome: "እንደምን አመሹ፣",
@@ -67,7 +80,20 @@ const translations = {
     uploadStudio: "ድምጽ ይፍጠሩ እና ይጫኑ",
     aiRecommended: "በአርቲፊሻል ኢንተለጀንስ የተመከረ",
     neuralPicks: "ለእርስዎ የተመረጡ",
-    soundOcean: "የቀጥታ ድምጽ ውቅያኖስ"
+    soundOcean: "የቀጥታ ድምጽ ውቅያኖስ",
+    loginTitle: "ግባ",
+    registerTitle: "አካውንት ክፈት",
+    fullName: "ሙሉ ስም",
+    email: "ኢሜይል",
+    password: "የይለፍ ቃል",
+    alreadyAccount: "አካውንት አለዎት? ይግቡ",
+    noAccount: "አዲስ አካውንት ክፈት",
+    loginSubtitle: "የኢትዮጵያን ድምፆች ያዳምጡ",
+    mostPopular: "ተወዳጅ",
+    newReleases: "አዳዲስ",
+    offlineAvailable: "ያለ ኢንተርኔት የሚሰሩ",
+    noEpisodes: "በዚህ ምድብ እስካሁን ምንም የለም።",
+    discoverSubtitle: "ያግኙ። ያዳምጡ። ይገናኙ።"
   },
   om: {
     welcome: "Akkam bultan,",
@@ -100,7 +126,20 @@ const translations = {
     uploadStudio: "Sagalee uumi ol fe'i",
     aiRecommended: "AI kan gorsa kennu",
     neuralPicks: "Siif kan filataman",
-    soundOcean: "Garba Sagalee Kallattii"
+    soundOcean: "Garba Sagalee Kallattii",
+    loginTitle: "Seeni",
+    registerTitle: "Account Banu",
+    fullName: "Maqaa Guutuu",
+    email: "Imeeyilii",
+    password: "Jecha Iccitii",
+    alreadyAccount: "Account qabduu? Seenaa",
+    noAccount: "Account haaraa bani",
+    loginSubtitle: "Sagalee Itiyoophiyaa dhaggeeffadhu",
+    mostPopular: "Baay'ee jaallataman",
+    newReleases: "Haaraa kan ba'an",
+    offlineAvailable: "Intarneetii malee",
+    noEpisodes: "Ramaddii kana jalatti homtuu hin jiru.",
+    discoverSubtitle: "Barbaadi. Dhaggeeffadhu. Wal quunnami."
   },
   ti: {
     welcome: "ከመይ ኣምሲኹም፣",
@@ -133,7 +172,20 @@ const translations = {
     uploadStudio: "ድምጺ ፈጢርካ ፅዓን",
     aiRecommended: "ብ AI ዝተመከረ",
     neuralPicks: "ንዓኻ ዝተመርጹ",
-    soundOcean: "ውቅያኖስ ድምጺ"
+    soundOcean: "ውቅያኖስ ድምጺ",
+    loginTitle: "እቶ",
+    registerTitle: "ኣካውንት ክፈት",
+    fullName: "ምሉእ ስም",
+    email: "ኢሜይል",
+    password: "መሕለፊ ቃል",
+    alreadyAccount: "ኣካውንት ኣለካ ድዩ? እቶ",
+    noAccount: "ሓድሽ ኣካውንት ክፈት",
+    loginSubtitle: "ድምጺ ኢትዮጵያ ስምዑ",
+    mostPopular: "ዝተመርጹ",
+    newReleases: "ሓደስቲ",
+    offlineAvailable: "ብዘይ ኢንተርኔት ዝሰርሑ",
+    noEpisodes: "ኣብዚ ዓይነት ዝተረኸበ የለን።",
+    discoverSubtitle: "ርኸብ። ስማዕ። ተራኸብ።"
   }
 };
 
