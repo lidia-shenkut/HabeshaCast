@@ -3,7 +3,7 @@ import {
   Settings, Heart, Download, Clock, ArrowRight, BarChart2, 
   ShieldAlert, Globe, Camera, Edit2, Bell, Lock, Eye, 
   Award, Star, Zap, User, Mail, Phone, MapPin, LogOut, 
-  Play, Trash2, Check, X, ArrowLeft
+  Play, Trash2, Check, X, ArrowLeft, Moon, Brain, Music, Mic
 } from 'lucide-react';
 import { useUserData } from '../../controllers/UserDataContext';
 import { useAuth } from '../../controllers/AuthContext';
