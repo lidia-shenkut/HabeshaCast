@@ -29,13 +29,6 @@ export default function ProfileScreen() {
     interests: user?.interests || ["Education", "History", "Storytelling"]
   });
 
-  const languages = [
-    { code: 'en', label: 'english' },
-    { code: 'am', label: 'amharic' },
-    { code: 'om', label: 'oromiffa' },
-    { code: 'ti', label: 'tigrinya' }
-  ];
-
   const fileInputRef = useRef(null);
   const avatarUrl = user?.avatar ? `http://${window.location.hostname}:5000${user.avatar}` : `https://ui-avatars.com/api/?name=${user?.name || 'Guest'}&background=6c5ce7&color=fff&size=200`;
 
@@ -157,7 +150,6 @@ export default function ProfileScreen() {
 
   return (
     <div className="screen scrollable">
-      {/* Premium Header */}
       <div className="profile-header">
         <div className="top-nav" style={{ marginBottom: 0, position: 'absolute', top: 20, left: 20, right: 20, zIndex: 10 }}>
           <button className="btn-icon" style={{ background: 'rgba(0,0,0,0.2)' }} onClick={() => navigate('/home')}>
@@ -180,14 +172,8 @@ export default function ProfileScreen() {
         </div>
 
         <div className="profile-avatar-container" onClick={() => fileInputRef.current.click()}>
-          <img 
-            src={avatarUrl} 
-            alt="Profile" 
-            className="profile-avatar"
-          />
-          <div className="avatar-edit-btn">
-            <Camera size={16} />
-          </div>
+          <img src={avatarUrl} alt="Profile" className="profile-avatar" />
+          <div className="avatar-edit-btn"><Camera size={16} /></div>
           <input type="file" ref={fileInputRef} style={{ display: 'none' }} accept="image/*" onChange={handleAvatarChange} />
         </div>
 
@@ -210,7 +196,6 @@ export default function ProfileScreen() {
         </div>
       </div>
 
-      {/* Dashboard Stats */}
       <div className="stat-grid">
         <div className="stat-card" onClick={() => setActiveView('history')} style={{ cursor: 'pointer' }}>
           <div className="stat-value">{listenedCount}</div>
@@ -230,7 +215,6 @@ export default function ProfileScreen() {
         </div>
       </div>
 
-      {/* Analytics Insight */}
       <div className="glass-panel" style={{ padding: '20px', marginBottom: '24px', display: 'flex', alignItems: 'center', gap: '16px', background: 'linear-gradient(135deg, var(--bg-card) 0%, var(--bg-input) 100%)' }}>
         <div style={{ background: 'var(--secondary-color)', padding: '12px', borderRadius: '16px', color: 'white' }}>
           <BarChart2 size={24} />
@@ -244,7 +228,6 @@ export default function ProfileScreen() {
         </div>
       </div>
 
-      {/* Culture Explorer Awards */}
       <div className="section-header" style={{ marginTop: '20px', marginBottom: '16px' }}>
         <h3 style={{ fontSize: '18px' }}>Culture Explorer Awards</h3>
         <span style={{ fontSize: '11px', color: 'var(--accent-color)', fontWeight: 700 }}>4/12 UNLOCKED</span>
@@ -277,7 +260,6 @@ export default function ProfileScreen() {
         ))}
       </div>
 
-      {/* Profile Links */}
       <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
         <div className="episode-card" style={{ alignItems: 'center' }} onClick={() => setActiveView('liked')}>
           <Heart size={20} color="var(--text-muted)" style={{ margin: '0 8px' }} />
