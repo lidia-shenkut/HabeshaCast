@@ -240,6 +240,7 @@ export default function ProfileScreen() {
           <div style={{ fontSize: '18px', fontWeight: '700' }}>{topCategory} Explorer</div>
           <div style={{ width: '100%', height: '4px', background: 'var(--bg-input)', borderRadius: '2px', marginTop: '8px' }}>
             <div style={{ width: '70%', height: '100%', background: 'var(--accent-color)', borderRadius: '2px' }}></div>
+          </div>
         </div>
       </div>
 
