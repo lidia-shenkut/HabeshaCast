@@ -5,12 +5,12 @@ import {
   Award, Star, Zap, User, Mail, Phone, MapPin, LogOut, 
   Play, Trash2, Check, X, ArrowLeft
 } from 'lucide-react';
-import ThemeToggle from '../components/ThemeToggle';
 import { useUserData } from '../../controllers/UserDataContext';
 import { useAuth } from '../../controllers/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import { useLanguage } from '../../controllers/LanguageContext';
 import { useTheme } from '../../controllers/ThemeContext';
+import SettingsView from '../components/SettingsView';
 
 export default function ProfileScreen() {
   const { downloads, history, getTopCategory, likes, customEpisodes, pendingEpisodes, allEpisodes, toggleLike, toggleDownload, deleteEpisode } = useUserData();
@@ -20,7 +20,8 @@ export default function ProfileScreen() {
   const navigate = useNavigate();
   
   const [isEditing, setIsEditing] = useState(false);
-  const [activeView, setActiveView] = useState('main'); // main, liked, history, downloads, uploads, settings
+  const [activeView, setActiveView] = useState('main'); // main, liked, history, downloads, uploads
+  const [showSettings, setShowSettings] = useState(false);
   const [profileData, setProfileData] = useState({
     bio: user?.bio || "Passionate storyteller and podcast enthusiast from Addis Ababa. 🎙️",
     phone: user?.phone || "+251 911 234 567",
@@ -96,6 +97,10 @@ export default function ProfileScreen() {
 
   const listView = getListViewData();
 
+  if (showSettings) {
+    return <SettingsView onClose={() => setShowSettings(false)} />;
+  }
+
   if (activeView !== 'main') {
     return (
       <div className="screen scrollable">
@@ -103,84 +108,38 @@ export default function ProfileScreen() {
           <button className="btn-icon" onClick={() => setActiveView('main')}>
             <ArrowLeft size={20} />
           </button>
-          <h2 style={{ marginBottom: 0 }}>{activeView === 'settings' ? t('settings') : listView.title}</h2>
+          <h2 style={{ marginBottom: 0 }}>{listView.title}</h2>
           <div style={{ width: '40px' }}></div>
         </div>
 
-        {activeView === 'settings' ? (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-            <div className="section-header">
-              <h3 className="section-title">Preferences</h3>
-            </div>
-            <div className="preference-row">
-              <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
-                <Zap size={20} color="var(--secondary-color)" />
-                <span>Dark Mode</span>
+        <div>
+          {listView.items.length > 0 ? listView.items.map(ep => (
+            <div key={ep.id} className="episode-card" onClick={() => navigate(`/player/${ep.id}`)}>
+              <div className="episode-thumb" style={{ background: ep.color }}></div>
+              <div className="episode-info">
+                <div className="episode-title">{ep.title}</div>
+                <div className="episode-author">{ep.author} • {ep.category}</div>
               </div>
-              <label className="switch">
-                <input type="checkbox" checked={isDark} onChange={toggleTheme} />
-                <span className="slider"></span>
-              </label>
-            </div>
-            <div className="preference-row" onClick={() => {
-              const nextIdx = (languages.findIndex(l => l.code === language) + 1) % languages.length;
-              setLanguage(languages[nextIdx].code);
-            }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
-                <Globe size={20} color="var(--accent-color)" />
-                <span>{t('language')}: {t(languages.find(l => l.code === language).label)}</span>
-              </div>
-              <Edit2 size={16} />
-            </div>
-
-            <div className="section-header">
-              <h3 className="section-title">Security</h3>
-            </div>
-            <div className="glass-panel" style={{ padding: '0 16px' }}>
-              <div className="editable-field">
-                <span>Change Password</span>
-                <ArrowRight size={16} />
-              </div>
-              <div className="editable-field">
-                <span>Privacy Controls</span>
-                <ArrowRight size={16} />
-              </div>
-              <div className="editable-field" style={{ borderBottom: 'none' }}>
-                <span>Delete Account</span>
-                <Trash2 size={16} color="#ff6b6b" />
-              </div>
-            </div>
-          </div>
-        ) : (
-          <div>
-            {listView.items.length > 0 ? listView.items.map(ep => (
-              <div key={ep.id} className="episode-card" onClick={() => navigate(`/player/${ep.id}`)}>
-                <div className="episode-thumb" style={{ background: ep.color }}></div>
-                <div className="episode-info">
-                  <div className="episode-title">{ep.title}</div>
-                  <div className="episode-author">{ep.author} • {ep.category}</div>
-                </div>
-                <div className="episode-actions">
-                  <button className="btn-icon" onClick={(e) => { e.stopPropagation(); navigate(`/player/${ep.id}`); }}>
-                    <Play size={18} fill="currentColor" />
+              <div className="episode-actions">
+                <button className="btn-icon" onClick={(e) => { e.stopPropagation(); navigate(`/player/${ep.id}`); }}>
+                  <Play size={18} fill="currentColor" />
+                </button>
+                {activeView === 'uploads' && (
+                  <button className="btn-icon" onClick={(e) => { e.stopPropagation(); deleteEpisode(ep.id); }}>
+                    <Trash2 size={18} color="#ff6b6b" />
                   </button>
-                  {activeView === 'uploads' && (
-                    <button className="btn-icon" onClick={(e) => { e.stopPropagation(); deleteEpisode(ep.id); }}>
-                      <Trash2 size={18} color="#ff6b6b" />
-                    </button>
-                  )}
-                </div>
+                )}
               </div>
-            )) : (
-              <div style={{ textAlign: 'center', padding: '60px 20px', color: 'var(--text-muted)' }}>
-                <div style={{ background: 'var(--bg-input)', width: '64px', height: '64px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 16px' }}>
-                  <X size={32} />
-                </div>
-                <p>No items found in this section.</p>
+            </div>
+          )) : (
+            <div style={{ textAlign: 'center', padding: '60px 20px', color: 'var(--text-muted)' }}>
+              <div style={{ background: 'var(--bg-input)', width: '64px', height: '64px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 16px' }}>
+                <X size={32} />
               </div>
-            )}
-          </div>
-        )}
+              <p>No items found in this section.</p>
+            </div>
+          )}
+        </div>
       </div>
     );
   }
@@ -203,7 +162,7 @@ export default function ProfileScreen() {
                 <Edit2 size={20} />
               </button>
             )}
-            <button className="btn-icon" style={{ background: 'rgba(0,0,0,0.2)' }} onClick={() => setActiveView('settings')}>
+            <button className="btn-icon" style={{ background: 'rgba(0,0,0,0.2)' }} onClick={() => setShowSettings(true)}>
               <Settings size={20} />
             </button>
           </div>
